@@ -1,0 +1,9 @@
+{
+  "id": "lc138-随机链表的复制",
+  "title": "138 随机链表的复制",
+  "code": "\"\"\"\n# Definition for a Node.\nclass Node:\n    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):\n        self.val = int(x)\n        self.next = next\n        self.random = random\n\"\"\"\n\nclass Solution:\n    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':\n        # 想法是, 用哈希存储节点到节点的映射\n        adict = {}\n\n        dummy = Node(0)\n        cur = dummy\n        # 第一遍扫描先创建新链表节点\n        headcur = head\n        while headcur:\n            cur.next = Node(headcur.val, None, None)\n            adict[headcur] = cur.next\n            cur = cur.next\n            headcur = headcur.next\n\n        # 第二遍扫描借助哈希表填入random\n        headcur = head\n        while headcur:\n            if headcur.random == None:\n                adict[headcur].random = None\n            else:\n                adict[headcur].random = adict[headcur.random]\n\n            headcur = headcur.next\n\n        return dummy.next",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1292
+  }
+}

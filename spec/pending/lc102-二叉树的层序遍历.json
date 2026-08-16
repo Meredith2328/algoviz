@@ -1,0 +1,9 @@
+{
+  "id": "lc102-二叉树的层序遍历",
+  "title": "102 二叉树的层序遍历",
+  "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:\n        res, cur_res = list(), list()\n        q = deque([(root, 1)])\n        cur = 1\n\n        while q:\n            node, node_dep = q.popleft()\n            if not node:\n                continue\n            elif node_dep > cur:\n                # 清空缓冲区, 再添加新元素\n                res.append(cur_res)\n                cur_res = list()\n                cur += 1\n\n            cur_res.append(node.val)\n            q.append((node.left, node_dep + 1))\n            q.append((node.right, node_dep + 1))\n\n        if cur_res:\n            res.append(cur_res)\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1585
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "lc22-括号生成",
+  "title": "22 括号生成",
+  "code": "class Solution:\n    def generateParenthesis(self, n: int) -> List[str]:\n        res = []\n\n        def backtrack(path, left, right):\n            if len(path) == 2 * n:\n                res.append(''.join(path))\n            # 可以加左括号的条件\n            if left < n:\n                path.append('(')\n                backtrack(path, left + 1, right)\n                path.pop()\n\n            # 可以加右括号的条件: 右括号数量小于左括号数量\n            if right < left:\n                path.append(')')\n                backtrack(path, left, right + 1)\n                path.pop()\n\n        backtrack([], 0, 0)\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 167
+  }
+}

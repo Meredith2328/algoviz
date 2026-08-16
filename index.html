@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>algoviz · 算法步骤可视化</title>
+<meta name="description" content="algoviz — 逐行高亮代码的算法步骤播放器，支持导入自己的题解。">
+<link rel="stylesheet" href="./player/algoviz.css">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px 16px 60px;
+    background: #17181a; color: #e4e6e9;
+    font-family: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    display: flex; justify-content: center;
+  }
+  .wrap { width: 100%; max-width: 1080px; }
+  .topbar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .brand {
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-weight: 700; font-size: 18px; letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .brand::before {
+    content: ""; width: 10px; height: 10px; background: #fdd663;
+    box-shadow: 15px 0 0 0 #7cabf5; margin-right: 14px;
+  }
+  .brand small { color: #82868b; font-size: 11px; font-weight: 400; }
+  .topbar .spacer { flex: 1; }
+  .av-select, .av-btn2 {
+    background: #17181a; color: #e4e6e9;
+    border: 2px solid #e4e6e9; border-radius: 0;
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em;
+    height: 34px; padding: 0 10px; cursor: pointer;
+    box-shadow: 3px 3px 0 0 #0c0d0e;
+  }
+  .av-select { max-width: 320px; }
+  .av-btn2:hover { background: #e4e6e9; color: #17181a; }
+  .av-btn2:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 0 #0c0d0e; }
+  #player-host { min-height: 200px; }
+  .footnote { color: #82868b; font-size: 12px; margin-top: 14px; line-height: 1.7; }
+  .footnote code { font-family: "JetBrains Mono", Consolas, monospace; color: #b4b8bd; }
+
+  .av-modal-mask2 {
+    position: fixed; inset: 0; background: rgba(12, 13, 14, 0.8);
+    display: flex; align-items: center; justify-content: center; z-index: 100;
+  }
+  .av-modal2 {
+    background: #17181a; border: 2px solid #e4e6e9; box-shadow: 5px 5px 0 0 #0c0d0e;
+    width: min(720px, 94vw); max-height: 88vh; overflow: auto;
+    padding: 16px 18px;
+  }
+  .av-modal2 h3 { margin: 0 0 4px; font-size: 15px; }
+  .av-modal2 .hint { color: #82868b; font-size: 12.5px; margin: 0 0 10px; line-height: 1.7; }
+  .av-modal2 textarea {
+    width: 100%; height: 260px; resize: vertical;
+    background: #232529; color: #e4e6e9; border: 2px solid #3d4045;
+    font-family: "JetBrains Mono", Consolas, monospace; font-size: 12px;
+    padding: 10px; line-height: 1.6;
+  }
+  .av-modal2 .err { color: #f08a84; font-size: 12px; font-family: "JetBrains Mono", monospace;
+    white-space: pre-wrap; margin-top: 8px; max-height: 120px; overflow: auto; }
+  .av-modal2 .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; flex-wrap: wrap; }
+  .av-modal2 input[type=file] { color: #b4b8bd; font-size: 12px; max-width: 240px; }
+  .steps-row { display: flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">algoviz<small>算法步骤可视化</small></div>
+    <div class="spacer"></div>
+    <select class="av-select" id="preset" aria-label="选择题目"></select>
+    <button class="av-btn2" id="btn-import">导入题目</button>
+    <button class="av-btn2" id="btn-prompt">复制 Prompt</button>
+  </div>
+
+  <div id="player-host"></div>
+
+  <p class="footnote">
+    左侧代码面板会像调试器一样逐步高亮当前执行行；右上角 <code>Edit Testcase</code>
+    可修改测试用例并即时重算步骤。预设题目来自内置题库；「导入题目」把你自己用大模型生成的模块
+    （JS 文本）粘贴或选择文件载入——<b>一切都在你的浏览器本地运行，不会上传到任何服务器</b>。
+  </p>
+</div>
+
+<script src="./player/algoviz.js"></script>
+<script>
+(function () {
+  "use strict";
+  var host = document.getElementById("player-host");
+  var preset = document.getElementById("preset");
+  var modulesBase = "./";
+
+  /* ---------- preset switching ---------- */
+  function loadPreset(id) {
+    if (!id) return;
+    host.innerHTML = "";
+    var el = document.createElement("div");
+    host.appendChild(el);
+    AlgoViz.loadModule(id, modulesBase).then(function (mod) {
+      AlgoViz.mountModule(el, mod);
+    }, function (err) {
+      el.textContent = "加载失败：" + err.message;
+      el.style.color = "#f08a84";
+    });
+  }
+
+  fetch(modulesBase + "modules.json").then(function (r) {
+    if (!r.ok) throw new Error("modules.json " + r.status);
+    return r.json();
+  }).then(function (list) {
+    list.forEach(function (m) {
+      var o = document.createElement("option");
+      o.value = m.id;
+      o.textContent = m.title || m.id;
+      preset.appendChild(o);
+    });
+    if (list.length) loadPreset(list[0].id);
+  }).catch(function (e) {
+    var o = document.createElement("option");
+    o.textContent = "题库加载失败（直接用「导入题目」也可以）";
+    preset.appendChild(o);
+  });
+
+  preset.addEventListener("change", function () { loadPreset(preset.value); });
+
+  /* ---------- import (paste or file, local only) ---------- */
+  function evalModule(js) {
+    var before = Object.keys(window.AlgoVizModules || {});
+    (0, eval)(js);
+    var after = Object.keys(window.AlgoVizModules || {});
+    var added = after.filter(function (k) { return before.indexOf(k) < 0; });
+    var key = added.length ? added[added.length - 1] : after[after.length - 1];
+    var mod = window.AlgoVizModules[key];
+    if (!mod || typeof mod.run !== "function") {
+      throw new Error("没有找到注册的模块（window.AlgoVizModules）");
+    }
+    return { key: key, mod: mod };
+  }
+
+  function mountCustom(mod, title) {
+    host.innerHTML = "";
+    var el = document.createElement("div");
+    host.appendChild(el);
+    var opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "▸ " + title;
+    opt.disabled = true; opt.selected = true;
+    preset.insertBefore(opt, preset.firstChild);
+    AlgoViz.mountModule(el, mod);
+  }
+
+  function modal(title, hint, bodyBuilder) {
+    var mask = document.createElement("div");
+    mask.className = "av-modal-mask2";
+    var box = document.createElement("div");
+    box.className = "av-modal2";
+    mask.appendChild(box);
+    var h = document.createElement("h3"); h.textContent = title;
+    var p = document.createElement("p"); p.className = "hint"; p.innerHTML = hint;
+    box.appendChild(h); box.appendChild(p);
+    bodyBuilder(box, function () { mask.remove(); });
+    mask.addEventListener("click", function (e) { if (e.target === mask) mask.remove(); });
+    document.body.appendChild(mask);
+    return box;
+  }
+
+  document.getElementById("btn-import").addEventListener("click", function () {
+    modal("导入题目（本地运行，不上传）",
+      "把你的 Python 题解用大模型生成 algoviz 模块（点「复制 Prompt」拿提示词），" +
+      "然后把生成的 <b>完整 JS 文本</b> 粘贴到下面，或直接选择 .js 文件。",
+      function (box, close) {
+        var ta = document.createElement("textarea");
+        ta.placeholder = '(function (global) {\n  global.AlgoVizModules = global.AlgoVizModules || {};\n  global.AlgoVizModules["my-problem"] = { ... };\n})(window);';
+        var file = document.createElement("input");
+        file.type = "file"; file.accept = ".js,.txt";
+        var err = document.createElement("div"); err.className = "err";
+        var actions = document.createElement("div"); actions.className = "actions";
+        var cancel = document.createElement("button");
+        cancel.className = "av-btn2"; cancel.textContent = "取消";
+        var run = document.createElement("button");
+        run.className = "av-btn2"; run.textContent = "▶ 加载并可视化";
+        actions.append(cancel, run);
+        box.append(ta, file, err, actions);
+        cancel.addEventListener("click", close);
+        file.addEventListener("change", function () {
+          var f = file.files && file.files[0];
+          if (!f) return;
+          var r = new FileReader();
+          r.onload = function () { ta.value = r.result; };
+          r.readAsText(f);
+        });
+        run.addEventListener("click", function () {
+          err.textContent = "";
+          try {
+            var got = evalModule(ta.value);
+            var mod = got.mod;
+            var steps = mod.run(mod.parseInput ? mod.parseInput(mod.defaultInput || "") : mod.defaultInput || "");
+            close();
+            mountCustom(mod, (mod.title || got.key) + "（自定义）");
+          } catch (e) {
+            err.textContent = "加载失败：" + (e && e.message || e);
+          }
+        });
+        ta.focus();
+      });
+  });
+
+  /* ---------- prompt builder ---------- */
+  var PROMPT_SYSTEM = "你是 algoviz 可视化模块生成器。algoviz 是一个算法步骤播放器：左边显示原始 " +
+    "Python 代码并像调试器一样逐步高亮当前行，右边显示若干可视化视图。" +
+    "你的任务是把给定的 Python 题解转译成一个自包含的 JS 模块，该模块的 run(input) " +
+    "要忠实复现 Python 解法的执行过程并产出步骤数组。只输出一个 ```js 代码块，不要输出其它解释。";
+
+  document.getElementById("btn-prompt").addEventListener("click", function () {
+    modal("生成 Prompt（拿去你自己的大模型用）",
+      "1. 复制下面整段提示词 → 2. 把末尾占位符替换成你的 Python 题解 → " +
+      "3. 交给任意大模型（DeepSeek / GPT / Claude / 本地模型都可以） → " +
+      "4. 把模型输出的 JS 模块用「导入题目」载入。<b>全程在你本地完成，数据不经我们。</b>",
+      function (box, close) {
+        var ta = document.createElement("textarea");
+        ta.readOnly = true;
+        var actions = document.createElement("div"); actions.className = "actions";
+        var cancel = document.createElement("button");
+        cancel.className = "av-btn2"; cancel.textContent = "关闭";
+        var copy = document.createElement("button");
+        copy.className = "av-btn2"; copy.textContent = "复制全文";
+        actions.append(cancel, copy);
+        box.append(ta, actions);
+        cancel.addEventListener("click", close);
+        copy.addEventListener("click", function () {
+          ta.select();
+          var ok = false;
+          try { ok = document.execCommand("copy"); } catch (e) {}
+          if (!ok && navigator.clipboard) {
+            navigator.clipboard.writeText(ta.value).then(function () { flash(); }, function () {});
+          } else if (ok) flash();
+          function flash() {
+            copy.textContent = "已复制 ✓";
+            setTimeout(function () { copy.textContent = "复制全文"; }, 1500);
+          }
+        });
+        fetch(modulesBase + "spec/module-format.md").then(function (r) {
+          return r.ok ? r.text() : Promise.reject(new Error("spec 404"));
+        }).then(function (spec) {
+          ta.value = PROMPT_SYSTEM + "\n\n# algoviz 模块格式规范\n\n" + spec +
+            "\n\n# 本次任务\n\n原始 Python 代码（模块的 code 字段必须与它逐字一致，" +
+            "行高亮要对准这段代码；JS 实现里的 line 号对应这段代码的 1-based 行号）：\n\n```python\n" +
+            "【把你的 Python 题解粘贴在这里】\n```\n\n要求：\n" +
+            "1. run(input) 的算法逻辑必须与这段 Python 完全等价，输出也要一致。\n" +
+            "2. defaultInput 用一个简短、能体现算法过程的用例；testInputs 再给 1-2 个（含边界情况），\n" +
+            "   expectedOutputs 给出每个输入对应 Python 解法的真实输出（认真模拟）。\n" +
+            "3. views 选 2-4 个最能体现该算法结构的视图。\n" +
+            "4. 每步 msg 用简体中文解释这一行在做什么。\n" +
+            "5. 步骤数控制在 30-200 之间；不要为一次赋值记录多步。\n";
+        }).catch(function () {
+          ta.value = PROMPT_SYSTEM + "\n\n（格式规范文件加载失败，请到仓库 spec/module-format.md 获取后拼接）\n";
+        });
+      });
+  });
+})();
+</script>
+</body>
+</html>

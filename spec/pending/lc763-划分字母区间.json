@@ -1,0 +1,9 @@
+{
+  "id": "lc763-划分字母区间",
+  "title": "763 划分字母区间",
+  "code": "class Solution:\n    def partitionLabels(self, s: str) -> List[int]:\n        last_pos = {}\n        for i, ch in enumerate(s):\n            last_pos[ch] = i\n        res = []\n        start = 0\n        end = 0\n        for i, ch in enumerate(s):\n            end = max(end, last_pos[ch])\n            if i == end:\n                res.append(end - start + 1)\n                start = i + 1\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 983
+  }
+}

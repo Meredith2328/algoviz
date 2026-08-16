@@ -1,0 +1,9 @@
+{
+  "id": "lc108-将有序数组转换为平衡二叉搜索树",
+  "title": "108 将有序数组转换为平衡二叉搜索树",
+  "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:\n        def build(left, right):\n            if left > right:\n                return None\n\n            mid = (left + right) // 2\n            root = TreeNode(nums[mid])\n\n            root.left = build(left, mid - 1)\n            root.right = build(mid + 1, right)\n            return root\n\n        return build(0, len(nums) - 1)",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1579
+  }
+}

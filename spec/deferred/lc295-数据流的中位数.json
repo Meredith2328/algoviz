@@ -1,0 +1,9 @@
+{
+  "id": "lc295-数据流的中位数",
+  "title": "295 数据流的中位数",
+  "code": "class MedianFinder:\n\n    def __init__(self):\n        self.small = [] # 最大堆, 存较小的元素, 存的都是负值\n        self.large = [] # 最小堆, 存较大的元素, 存的都是正值\n\n    def addNum(self, num: int) -> None:\n        # 始终使得最大堆小于等于最小堆\n        heapq.heappush(self.small, -num)\n        if self.small and self.large and -self.small[0] > self.large[0]:\n            val = -heapq.heappop(self.small)\n            heapq.heappush(self.large, val)\n\n        # 最大堆比最小堆多至多一个元素\n        if len(self.small) > len(self.large) + 1:\n            val = -heapq.heappop(self.small)\n            heapq.heappush(self.large, val)\n        elif len(self.large) > len(self.small):\n            val = -heapq.heappop(self.large)\n            heapq.heappush(self.small, val)\n\n    def findMedian(self) -> float:\n        if (len(self.small) + len(self.large)) % 2:\n            return -self.small[0]\n        else:\n            return (-self.small[0] + self.large[0]) / 2\n\n\n            # Your MedianFinder object will be instantiated and called as such:\n            # obj = MedianFinder()\n            # obj.addNum(num)\n# param_2 = obj.findMedian()",
+  "source": {
+    "post": "C:/desktoppp/pilog/blogs/posts/notes/algo/algorithm-5.md",
+    "line": 791
+  }
+}

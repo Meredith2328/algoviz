@@ -1,0 +1,9 @@
+{
+  "id": "lc206-反转链表",
+  "title": "206 反转链表",
+  "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:\n        prev, cur = None, head\n        while cur:\n            next_temp = cur.next\n            cur.next = prev\n            prev = cur\n            cur = next_temp\n        return prev",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 947
+  }
+}

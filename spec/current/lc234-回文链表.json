@@ -1,0 +1,9 @@
+{
+  "id": "lc234-回文链表",
+  "title": "234 回文链表",
+  "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def isPalindrome(self, head: Optional[ListNode]) -> bool:\n        alist = []\n        while head:\n            alist.append(head.val)\n            head = head.next\n        return list(reversed(alist)) == alist",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 940
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "lc76-最小覆盖子串",
+  "title": "76 最小覆盖子串",
+  "code": "class Solution:\n    def minWindow(self, s: str, t: str) -> str:\n        # 代码其实很直接.\n        # 两个Counter利用>=处理\"包含, 包括重复字符\",\n        # 伸展滑动窗口右指针, 如果成功包含, 则缩短左指针直到最小.\n        cnt_s = Counter()\n        cnt_t = Counter(t)\n\n        ans_left, ans_right = -1, len(s) # 找到最短\n        left = 0\n        for right, c in enumerate(s):\n            cnt_s[c] += 1\n            while cnt_s >= cnt_t: # 涵盖\n                if right - left < ans_right - ans_left:\n                    ans_left, ans_right = left, right\n                cnt_s[s[left]] -= 1\n                left += 1\n        return \"\" if ans_left < 0 else s[ans_left: ans_right + 1]",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 513
+  }
+}

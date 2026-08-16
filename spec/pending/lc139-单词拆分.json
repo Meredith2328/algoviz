@@ -1,0 +1,9 @@
+{
+  "id": "lc139-单词拆分",
+  "title": "139 单词拆分",
+  "code": "class Solution:\n    def wordBreak(self, s: str, wordDict: List[str]) -> bool:\n        # 对于字符串的dp, 要意识到字符串一般都是从左往右遍历下标.\n        # 那么对于结尾为i(开)的字符串s[0..i],可以分割意味着存在分割点j, 使得dp[j]=True且s[j..i]在wordDict中.\n        wordDict = set(wordDict) # 会快很多\n        n = len(s)\n        dp = [False] * (n + 1)\n        dp[0] = True # 空串\n        for i in range(n + 1):\n            for j in range(i):\n                if dp[j] and s[j:i] in wordDict:\n                    dp[i] = True\n        return dp[n]",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1258
+  }
+}

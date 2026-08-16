@@ -1,0 +1,9 @@
+{
+  "id": "lc1-两数之和",
+  "title": "1 两数之和",
+  "code": "class Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        d = {} # 从val到i的映射\n        for i, val in enumerate(nums):\n            if (target - val) in d:\n                return [i, d[target - val]]\n            d[val] = i",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 41
+  }
+}

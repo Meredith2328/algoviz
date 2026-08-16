@@ -1,0 +1,9 @@
+{
+  "id": "lc230-二叉搜索树中第k小的元素",
+  "title": "230 二叉搜索树中第K小的元素",
+  "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:\n        stk = []\n        curr = root\n        while curr or stk:\n            while curr:\n                stk.append(curr)\n                curr = curr.left\n            curr = stk.pop()\n            k -= 1\n            if k == 0:\n                return curr.val\n            curr = curr.right",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1669
+  }
+}

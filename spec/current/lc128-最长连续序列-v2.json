@@ -1,0 +1,9 @@
+{
+  "id": "lc128-最长连续序列-v2",
+  "title": "128 最长连续序列",
+  "code": "class Solution:\n    def subarraySum(self, nums: List[int], k: int) -> int:\n        prefix_sum = defaultdict(int) # 前缀和:个数\n        prefix_sum[0] = 1\n        cur_sum = 0\n        res = 0\n        for num in nums:\n            cur_sum += num\n            if cur_sum - k in prefix_sum:\n                res += prefix_sum[cur_sum - k]\n            prefix_sum[cur_sum] += 1\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 104
+  }
+}

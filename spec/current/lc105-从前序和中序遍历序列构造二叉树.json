@@ -1,0 +1,9 @@
+{
+  "id": "lc105-从前序和中序遍历序列构造二叉树",
+  "title": "105 从前序和中序遍历序列构造二叉树",
+  "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:\n        n = len(inorder)\n        def build(l1, r1, l2, r2):\n            if l1 > r1 or l2 > r2:\n                return None\n\n            root = preorder[l1]\n            for i in range(n):\n                if inorder[i] == root:\n                    t = TreeNode(root)\n                    t.left = build(l1 + 1, l1 + i - l2, l2, i - 1)\n                    t.right = build(l1 + 1 + i - l2, r1, i + 1, r2)\n                    return t\n\n        return build(0, len(preorder) - 1, 0, len(preorder) - 1)",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1761
+  }
+}

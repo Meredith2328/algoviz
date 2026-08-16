@@ -1,0 +1,9 @@
+{
+  "id": "lc198-打家劫舍",
+  "title": "198 打家劫舍",
+  "code": "class Solution:\n    def rob(self, nums: List[int]) -> int:\n        if len(nums) == 1:\n            return nums[0]\n        dp = [0] * len(nums)\n        dp[0] = nums[0]\n        dp[1] = max(nums[0], nums[1])\n        for i in range(2, len(nums)):\n            dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])\n        return dp[len(nums) - 1]",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1105
+  }
+}

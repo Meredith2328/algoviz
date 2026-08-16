@@ -1,0 +1,9 @@
+{
+  "id": "lc73-矩阵置零-v2",
+  "title": "73 矩阵置零",
+  "code": "class Solution:\n    def setZeroes(self, matrix: List[List[int]]) -> None:\n        \"\"\"\n        Do not return anything, modify matrix in-place instead.\n        \"\"\"\n        rows = [0] * len(matrix)\n        cols = [0] * len(matrix[0])\n\n        for i in range(len(rows)):\n            for j in range(len(cols)):\n                if matrix[i][j] == 0:\n                    rows[i], cols[j] = 1, 1\n\n        for i in range(len(rows)):\n            if rows[i] != 0:\n                for j in range(len(cols)):\n                    matrix[i][j] = 0\n\n        for j in range(len(cols)):\n            if cols[j] != 0:\n                for i in range(len(rows)):\n                    matrix[i][j] = 0",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 771
+  }
+}

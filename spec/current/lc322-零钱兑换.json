@@ -1,0 +1,9 @@
+{
+  "id": "lc322-零钱兑换",
+  "title": "322 零钱兑换",
+  "code": "class Solution:\n    def coinChange(self, coins: List[int], amount: int) -> int:\n        if amount < 0:\n            return -1\n        elif amount == 0:\n            return 0\n        minCnt = float('inf')\n        for coin in coins:\n            cnt = self.coinChange(coins, amount - coin)\n            if cnt == -1:\n                continue\n            minCnt = min(minCnt, cnt + 1)\n        if minCnt == float('inf'):\n            return -1\n        else:\n            return minCnt",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1148
+  }
+}

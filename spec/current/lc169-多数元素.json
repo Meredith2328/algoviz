@@ -1,0 +1,9 @@
+{
+  "id": "lc169-多数元素",
+  "title": "169 多数元素",
+  "code": "class Solution:\n    def majorityElement(self, nums: List[int]) -> int:\n        count = 0\n        majority = -1\n        for num in nums:\n            if count == 0:\n                majority = num\n                count += 1\n            elif majority == num:\n                count += 1\n            else:\n                count -= 1\n        return majority\n                ",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1640
+  }
+}

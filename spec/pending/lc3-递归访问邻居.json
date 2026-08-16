@@ -1,0 +1,9 @@
+{
+  "id": "lc3-递归访问邻居",
+  "title": "3 递归访问邻居",
+  "code": "def dfs_stack(start, graph):\n    visited = set()\n    stack = [start]\n    while stack:\n        node = stack.pop()\n        if node in visited:\n            continue\n        visited.add(node)\n        print(node)\n        # 把未访问的邻居压入栈\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                stack.append(neighbor)",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 2116
+  }
+}

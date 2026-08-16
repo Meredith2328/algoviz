@@ -1,0 +1,9 @@
+{
+  "id": "lc24-两两交换链表中的节点",
+  "title": "24 两两交换链表中的节点",
+  "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def swapPairs(self, head: Optional[ListNode]) -> Optional[ListNode]:\n        if head == None or head.next == None:\n            return head\n        prev = None\n        cur1, cur2 = head, head.next\n        while cur2 != None:\n            cur1.val, cur2.val = cur2.val, cur1.val\n            cur1 = cur1.next.next\n            if cur2.next == None:\n                break\n            cur2 = cur2.next.next\n        return head",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1159
+  }
+}

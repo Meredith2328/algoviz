@@ -1,0 +1,9 @@
+{
+  "id": "lc142-环形链表-ii",
+  "title": "142 环形链表 II",
+  "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, x):\n#         self.val = x\n#         self.next = None\n\nclass Solution:\n    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:\n        visited = set()\n        while head:\n            if head in visited:\n                return head\n            visited.add(head)\n            head = head.next\n        return None",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1000
+  }
+}

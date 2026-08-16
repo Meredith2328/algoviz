@@ -1,0 +1,9 @@
+{
+  "id": "lc322-零钱兑换-v2",
+  "title": "322 零钱兑换",
+  "code": "class Solution:\n    def coinChange(self, coins: List[int], amount: int) -> int:\n        if amount < 0:\n            return -1\n        elif amount == 0:\n            return 0\n        elif not hasattr(self, 'coinCache'):\n            self.coinCache = [float('inf')] * (amount + 1)\n            self.coinCache[0] = 0\n        elif hasattr(self, 'coinCache') and self.coinCache[amount] != float('inf'):\n            return self.coinCache[amount]\n\n        minCnt = float('inf')\n        for coin in coins:\n            cnt = self.coinChange(coins, amount - coin)\n            if cnt == -1:\n                continue\n            minCnt = min(minCnt, cnt + 1)\n        if minCnt == float('inf'):\n            self.coinCache[amount] = -1\n            return -1\n        else:\n            self.coinCache[amount] = minCnt\n            return minCnt",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1169
+  }
+}

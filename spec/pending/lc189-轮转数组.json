@@ -1,0 +1,9 @@
+{
+  "id": "lc189-轮转数组",
+  "title": "189 轮转数组",
+  "code": "class Solution:\n    def rotate(self, nums: List[int], k: int) -> None:\n        \"\"\"\n        Do not return anything, modify nums in-place instead.\n        \"\"\"\n        new_nums = []\n        mod_k = len(nums) - (k % len(nums))\n        for num in nums[mod_k:]:\n            new_nums.append(num)\n        for num in nums[:mod_k]:\n            new_nums.append(num)\n        for i, num in enumerate(new_nums):\n            nums[i] = num",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 635
+  }
+}

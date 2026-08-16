@@ -1,0 +1,9 @@
+{
+  "id": "lc114-二叉树展开为链表",
+  "title": "114 二叉树展开为链表",
+  "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def flatten(self, root: Optional[TreeNode]) -> None:\n        \"\"\"\n        Do not return anything, modify root in-place instead.\n        \"\"\"\n        if not root:\n            return\n\n        def preorder(root):\n            if not root:\n                return []\n            return [root] + preorder(root.left) + preorder(root.right)\n\n        nodes = preorder(root)\n\n        for i in range(len(nodes) - 1):\n            nodes[i].left = None\n            nodes[i].right = nodes[i + 1]",
+  "source": {
+    "post": "C:/desktoppp/pilog/blogs/posts/notes/algo/algorithm-4.md",
+    "line": 1730
+  }
+}

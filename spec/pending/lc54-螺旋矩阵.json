@@ -1,0 +1,9 @@
+{
+  "id": "lc54-螺旋矩阵",
+  "title": "54 螺旋矩阵",
+  "code": "class Solution:\n    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:\n        m, n = len(matrix), len(matrix[0])\n        visited = [n * [0] for _ in range(m)]\n\n        # 顺时针\n        dx = [0, 1, 0, -1]\n        dy = [1, 0, -1, 0]\n        x, y = 0, 0\n        d = 0\n        res = []\n\n        for _ in range(m * n):\n            res.append(matrix[x][y])\n            visited[x][y] = 1\n\n            # 行, 列\n            nx, ny = x + dx[d], y + dy[d]\n            if (0 <= nx < m) and (0 <= ny < n) and (not visited[nx][ny]):\n                x, y = nx, ny\n            else:\n                d = (d + 1) % 4\n                x, y = x + dx[d], y + dy[d]\n\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 836
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "lc17-电话号码的字母组合",
+  "title": "17 电话号码的字母组合",
+  "code": "class Solution:\n    def letterCombinations(self, digits: str) -> List[str]:\n        adict = {'2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'}\n        res = []\n\n        def backtrack(path, cur):\n            if cur == len(digits):\n                res.append(''.join(path[:]))\n                return\n            for choice in adict[digits[cur]]:\n                path.append(choice)\n                backtrack(path, cur + 1)\n                path.pop()\n\n        backtrack([], 0)\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 84
+  }
+}

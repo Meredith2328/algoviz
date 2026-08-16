@@ -1,0 +1,9 @@
+{
+  "id": "lc72-编辑距离-v2",
+  "title": "72 编辑距离",
+  "code": "class Solution:\n    def maxCoins(self, nums: List[int]) -> int:\n        points = [1] + nums + [1]\n        n = len(points)\n        dp = [[0] * n for _ in range(n)]\n        for length in range(2, n): # 开区间 (i, j)\n            for i in range(0, n - length):\n                j = i + length\n                for k in range(i + 1, j):\n                    dp[i][j] = max(dp[i][j], points[i] * points[k] * points[j] + dp[i][k] + dp[k][j])\n        return dp[0][n - 1]",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1605
+  }
+}

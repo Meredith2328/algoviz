@@ -1,0 +1,9 @@
+{
+  "id": "lc128-最长连续序列",
+  "title": "128 最长连续序列",
+  "code": "class Solution:\n    def longestConsecutive(self, nums: List[int]) -> int:\n        num_set = set(nums)\n        sz = 0\n        for num in num_set:\n            # 剪枝: 只判断连续序列的开头元素.\n            if num - 1 in num_set:\n                continue\n            cur_sz = 1\n            cur_num = num + 1\n            while cur_num in num_set:\n                cur_sz += 1\n                cur_num += 1\n            sz = max(sz, cur_sz)\n        return sz",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 76
+  }
+}

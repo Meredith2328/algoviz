@@ -1,0 +1,9 @@
+{
+  "id": "lc239-滑动窗口最大值",
+  "title": "239 滑动窗口最大值",
+  "code": "class Solution:\n    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:\n        # 方法一当然是模拟.\n        res, n = [], len(nums)\n        for i in range(n):\n            j = i + k\n            if j > n:\n                break\n            res.append(max(nums[i:j]))\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 481
+  }
+}

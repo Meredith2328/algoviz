@@ -1,0 +1,9 @@
+{
+  "id": "lc3-坐标映射",
+  "title": "3 坐标映射很像PyTorch的Tensor。函数参数使用的坐标是1~16，为了把它映射到行号和列号，需要先映射到0~15，然后使用整除`/`和取模`%`（本质是移位和位与）。而块号可以由行号和列号映射得到。当然也可以直接用原始坐标求得，见下。",
+  "code": "def map_number(n):\n\t'''将n: 1~16映射到00110011 22332233.'''\n\t\n\tidx = n - 1\n\t# 高2位决定基本值: 00->0, 01->0, 10->2, 11->2\n\thigh_bits = (idx >> 2) & 0b10\n\t# 低2位决定是否+1: 00->0, 01->0, 10->1, 11->1\n\tlow_bits = (idx & 0b10) >> 1\n\treturn high_bits + low_bits",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-3.md",
+    "line": 1541
+  }
+}

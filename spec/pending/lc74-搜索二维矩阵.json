@@ -1,0 +1,9 @@
+{
+  "id": "lc74-搜索二维矩阵",
+  "title": "74 搜索二维矩阵",
+  "code": "class Solution:\n    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:\n        m, n = len(matrix), len(matrix[0])\n        for i in range(m):\n            j = bisect.bisect_left(matrix[i], target)\n            if j < n and matrix[i][j] == target:\n                return True\n        return False",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 393
+  }
+}

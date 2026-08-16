@@ -1,0 +1,9 @@
+{
+  "id": "lc45-跳跃游戏-ii-v2",
+  "title": "45 跳跃游戏 II",
+  "code": "class Solution:\n    def jump(self, nums: List[int]) -> int:\n        n = len(nums)\n        if n == 1:\n            return 0\n        jumps = 0\n        cur_end = 0\n        farthest = 0\n        for i in range(n - 1):\n            farthest = max(farthest, i + nums[i])\n\n            if i == cur_end: # 需要多跳一次\n                jumps += 1\n                cur_end = farthest\n\n                # 注意这个剪枝不能写在farthest更新的下一行, 因为需要先更新完jump数.\n                if cur_end >= n - 1:\n                    break\n        return jumps",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 956
+  }
+}

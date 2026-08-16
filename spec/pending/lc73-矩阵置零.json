@@ -1,0 +1,9 @@
+{
+  "id": "lc73-矩阵置零",
+  "title": "73 矩阵置零",
+  "code": "class Solution:\n    def setZeroes(self, matrix: List[List[int]]) -> None:\n        \"\"\"\n        Do not return anything, modify matrix in-place instead.\n        \"\"\"\n        waitlist = []\n        for i in range(len(matrix)):\n            for j in range(len(matrix[0])):\n                if matrix[i][j] == 0:\n                    waitlist.append((i,j))\n\n        for row, col in waitlist:\n            for j in range(len(matrix[0])):\n                matrix[row][j] = 0\n            for i in range(len(matrix)):\n                matrix[i][col] = 0",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 749
+  }
+}

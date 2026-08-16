@@ -1,0 +1,9 @@
+{
+  "id": "lc560-和为-k-的子数组-v2",
+  "title": "560 和为 K 的子数组",
+  "code": "class Solution:\n    def subarraySum(self, nums: List[int], k: int) -> int:\n        # 首先计算前缀和数组. 注意前缀和数组比原数组多一项s[0] = 0.\n        s = [0] * (len(nums) + 1)\n        for i, x in enumerate(nums):\n            s[i + 1] = s[i] + x\n        \n        adict = defaultdict(int)\n        res = 0\n        for sj in s:\n            # 注意枚举的是\"曾经有过多少个sj - k\"\n            # 所以应该先加res, 而不能把sj本身计入\n            res += adict[sj - k]\n            adict[sj] += 1\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 470
+  }
+}
