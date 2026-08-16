@@ -1,12 +1,14 @@
-# algoviz — 算法题步骤可视化播放器
+# algoviz — 模块化的像素风算法步骤可视化播放器
 
-独立可复用的算法步骤播放器：左边展示原始 Python 题解并像调试器一样
-逐步高亮当前行，右边是结构化可视化视图（数组/条形/堆/树/图/栈/队列/变量等），
-支持播放/单步/倍速/进度条、收起/展开（保留进度），右上角可编辑测试用例并即时
-重新生成全部步骤。
+<img width="1371" height="641" alt="image" src="https://github.com/user-attachments/assets/9a0c9905-698d-4165-8823-e0f996ba562e" />
 
-**在线演示**：<https://meredith2328.github.io/algoviz/> ——可切换内置题库，
-也可用自己的大模型按提示词生成模块后粘贴导入（全程本地运行，不上传）。
+**在线演示**：<https://meredith2328.github.io/algoviz/> 
+
+可切换内置题库，也可用自己的大模型按提示词生成模块后粘贴导入（全程本地运行，不上传）。
+
+- 左边展示上传的原始 Python 题解, 并像调试器一样逐步高亮当前行；
+- 右边是结构化可视化视图（数组/条形/堆/树/图/栈/队列/变量等），支持播放/单步/倍速/进度条、收起/展开（保留进度），
+- 右上角可编辑测试用例并即时重新生成全部步骤。
 
 零依赖、纯静态：一个 `algoviz.js` + `algoviz.css` + 一堆模块文件。
 
@@ -56,7 +58,7 @@ node tools/validate.js modules/my-problem.js
 python tools/sync_integrations.py
 ```
 
-leetgotya 里已接好：揭示面板对有模块的题显示「▶ 步骤可视化」按钮
+[leetgotya](https://meredith2328.github.io/leetgotya/) 里已接好：揭示面板对预存的题目显示「▶ 步骤可视化」按钮
 （通过 `algoviz/manifest.json` 的题号映射）。
 
 ## 性能约定（步数很多也不会卡）
