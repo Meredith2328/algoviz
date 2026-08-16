@@ -39,10 +39,16 @@ def build_manifest() -> dict:
     return {"count": len(entries), "modules": entries}
 
 
-def sync(target_dir: Path) -> None:
-    dst = target_dir / "algoviz"
+def sync(target_dir: Path, name: str = "algoviz") -> None:
+    dst = target_dir / name
     if dst.exists():
         shutil.rmtree(dst)
+    # pilog's site lives at the user page root; an "algoviz" dir there would
+    # be shadowed by the algoviz project Pages at /algoviz/ — use a distinct
+    # directory name and remove any stale one from the old layout
+    stale = target_dir / ("algoviz" if name != "algoviz" else "algoviz-player")
+    if stale.exists():
+        shutil.rmtree(stale)
     dst.mkdir(parents=True)
     shutil.copy2(ROOT / "player" / "algoviz.js", dst / "algoviz.js")
     shutil.copy2(ROOT / "player" / "algoviz.css", dst / "algoviz.css")
@@ -60,9 +66,9 @@ def sync(target_dir: Path) -> None:
 def main() -> None:
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
     if which in ("all", "pilog"):
-        sync(PILOG / "generator" / "static")
+        sync(PILOG / "generator" / "static", "algoviz-player")
     if which in ("all", "leetgotya"):
-        sync(LEETGOTYA)
+        sync(LEETGOTYA, "algoviz")
 
 
 if __name__ == "__main__":
