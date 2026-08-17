@@ -1,0 +1,9 @@
+{
+  "id": "lc543-二叉树的直径-v2",
+  "title": "543 二叉树的直径",
+  "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:\n        if not root:\n            return []\n        res = []\n        queue = deque([root])\n        while queue:\n            cur_layer = []\n            layer_size = len(queue)\n            for _ in range(layer_size):\n                node = queue.popleft()\n                cur_layer.append(node.val)\n                if node.left:\n                    queue.append(node.left)\n                if node.right:\n                    queue.append(node.right)\n            res.append(cur_layer)\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1749
+  }
+}

@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:\n        stk = []\n        res = [0] * len(temperatures)\n        for i, temp in enumerate(temperatures):\n            while stk and stk[-1][1] < temp:\n                cur_i, _ = stk.pop()\n                res[cur_i] = i - cur_i\n            stk.append((i, temp))\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 678
+    "line": 657
   }
 }

@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def sortColors(self, nums: List[int]) -> None:\n        \"\"\"\n        Do not return anything, modify nums in-place instead.\n        \"\"\"\n        # l和r是待分配位置, cur是正在扫描的元素\n        l, cur, r = 0, 0, len(nums) - 1\n        while cur <= r:\n            if nums[cur] == 0:\n                nums[cur], nums[l] = nums[l], nums[cur]\n                l += 1\n                cur += 1\n            elif nums[cur] == 2:\n                nums[cur], nums[r] = nums[r], nums[cur]\n                r -= 1\n                # 注意！！这里cur不增加, 因为交换过来的数还没处理\n            else:\n                cur += 1\n                ",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 1673
+    "line": 1770
   }
 }

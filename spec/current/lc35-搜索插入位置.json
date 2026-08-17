@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def searchInsert(self, nums: List[int], target: int) -> int:\n        return bisect.bisect_left(nums, target)",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 369
+    "line": 365
   }
 }

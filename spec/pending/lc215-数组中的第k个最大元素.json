@@ -1,9 +1,9 @@
 {
   "id": "lc215-数组中的第k个最大元素",
   "title": "215 数组中的第K个最大元素",
-  "code": "class Solution:\n    def findKthLargest(self, nums: List[int], k: int) -> int:\n        nums.sort()\n        return nums[-k]",
+  "code": "class Solution:\n    def findKthLargest(self, nums: List[int], k: int) -> int:\n        heap = [] # 最小堆解法\n        for num in nums:\n            heapq.heappush(heap, num)\n            if len(heap) > k:\n                heapq.heappop(heap)\n        return heap[0]",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 779
+    "line": 801
   }
 }

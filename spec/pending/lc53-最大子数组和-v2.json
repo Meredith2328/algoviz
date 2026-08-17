@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def maxSubArray(self, nums: List[int]) -> int:\n        n = len(nums)\n        dp = [0] * (n + 1)\n        dp[0] = nums[0]\n        maxval = dp[0]\n\n        for i in range(1, n):\n            # 新元素一定被选择. 选择是是否包含前面的: 如果是拖油瓶(负值), 则轻装上阵.\n            dp[i] = max(dp[i-1]+nums[i], nums[i])\n            maxval = max(maxval, dp[i])\n        return maxval",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 571
+    "line": 624
   }
 }

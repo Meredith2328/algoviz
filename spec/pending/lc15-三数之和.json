@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def threeSum(self, nums: List[int]) -> List[List[int]]:\n        res = []\n        # 对于给定的nums[k], 相当于两数之和.\n        for k, num in enumerate(nums):\n            # 值到下标的map, 因为要返回下标\n            adict = {}\n            for i, num_i in enumerate(nums):\n                if i == k:\n                    continue\n                val_list = tuple(sorted([num, num_i, -num - num_i]))\n                if -num - num_i in adict:\n                    res.append(val_list)\n                adict[num_i] = i\n                \n        # 去重\n        res = list(set(res))\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 198
+    "line": 191
   }
 }

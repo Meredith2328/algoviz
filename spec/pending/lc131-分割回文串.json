@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def partition(self, s: str) -> List[List[str]]:\n        res = []\n        def backtrack(start, path):\n            if start == len(s):\n                res.append(path[:])\n\n            for end in range(start, len(s)):\n                subs = s[start:end + 1]\n                if subs[::-1] == subs:\n                    path.append(subs)\n                    backtrack(end + 1, path)\n                    path.pop()\n        backtrack(0, [])\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 237
+    "line": 226
   }
 }

@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:\n        group = {}\n        for s in strs:\n            sorted_s = ''.join(sorted(s))\n            if sorted_s not in group:\n                group[sorted_s] = [s]\n            else:\n                group[sorted_s].append(s)\n\n        return list(group.values())",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 56
+    "line": 54
   }
 }

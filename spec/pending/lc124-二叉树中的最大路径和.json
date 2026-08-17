@@ -4,6 +4,6 @@
   "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def maxPathSum(self, root: Optional[TreeNode]) -> int:\n        self.res = -float('inf')\n        \n        def maxGain(node):\n            if not node:\n                return 0 # 不选\n            \n            # 以某个节点为根的最大贡献.\n            l = max(maxGain(node.left), 0)\n            r = max(maxGain(node.right), 0)\n            pathSum = l + r + node.val\n            self.res = max(self.res, pathSum)\n            # 向上贡献时只能二选一.\n            return max(l, r) + node.val\n            \n        maxGain(root)\n        return self.res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 1993
+    "line": 2144
   }
 }

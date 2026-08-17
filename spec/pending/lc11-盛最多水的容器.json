@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def maxArea(self, height: List[int]) -> int:\n        sz = len(height)\n        max_area = 0\n        i, j = 0, sz - 1\n        while i < j:\n            cur_area = min(height[i], height[j]) * (j - i)\n            max_area = max(max_area, cur_area)\n            if height[i] < height[j]:\n                i += 1\n            else:\n                j -= 1\n\n        return max_area",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 174
+    "line": 168
   }
 }

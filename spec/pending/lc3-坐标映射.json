@@ -4,6 +4,6 @@
   "code": "def map_number(n):\n\t'''将n: 1~16映射到00110011 22332233.'''\n\t\n\tidx = n - 1\n\t# 高2位决定基本值: 00->0, 01->0, 10->2, 11->2\n\thigh_bits = (idx >> 2) & 0b10\n\t# 低2位决定是否+1: 00->0, 01->0, 10->1, 11->1\n\tlow_bits = (idx & 0b10) >> 1\n\treturn high_bits + low_bits",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-3.md",
-    "line": 1541
+    "line": 1540
   }
 }

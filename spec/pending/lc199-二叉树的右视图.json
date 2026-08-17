@@ -4,6 +4,6 @@
   "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:\n        # 基于层序遍历\n        if not root:\n            return []\n\n        q = deque([root])\n        res = []\n\n        while q:\n            # 当前层的节点个数\n            level_size = len(q)\n            for i in range(level_size):\n                node = q.popleft()\n                if i == level_size - 1:\n                    res.append(node.val)\n                if node.left:\n                    q.append(node.left)\n                if node.right:\n                    q.append(node.right)\n\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 1740
+    "line": 1896
   }
 }

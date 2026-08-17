@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def permute(self, nums: List[int]) -> List[List[int]]:\n        res = []\n\n        # 回溯: 结束, 遍历, 选择\n        def backtrack(path, used):\n            if len(path) == len(nums):\n                res.append(path[:])\n            for i in range(len(nums)):\n                if used[i]:\n                    continue\n\n                path.append(nums[i])\n                used[i] = True\n                backtrack(path, used)\n                path.pop()\n                used[i] = False\n\n        backtrack([], [False] * len(nums))\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 36
+    "line": 31
   }
 }

@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def canJump(self, nums: List[int]) -> bool:\n        maxReach = 0\n        for i in range(len(nums)):\n            if maxReach < i:\n                return False\n            maxReach = max(maxReach, i + nums[i])\n            if maxReach >= len(nums) - 1:\n                return True\n        return maxReach >= len(nums) - 1",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 899
+    "line": 948
   }
 }

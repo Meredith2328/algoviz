@@ -4,6 +4,6 @@
   "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, x):\n#         self.val = x\n#         self.next = None\n\nclass Solution:\n    def hasCycle(self, head: Optional[ListNode]) -> bool:\n        fast, slow = head, head\n        while fast != None and fast.next != None:\n            fast = fast.next.next\n            slow = slow.next\n            if fast == slow:\n                return True\n        return False",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 1009
+    "line": 1046
   }
 }

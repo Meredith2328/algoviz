@@ -4,6 +4,6 @@
   "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def check2Trees(self, t1, t2):\n        if not t1 and not t2:\n            return True\n        elif not t1 and t2:\n            return False\n        elif not t2 and t1:\n            return False\n        elif t1.val != t2.val:\n            return False\n        else:\n            return self.check2Trees(t1.left, t2.right) and self.check2Trees(t1.right, t2.left)\n\n    def isSymmetric(self, root: Optional[TreeNode]) -> bool:\n        if not root:\n            return True\n        else:\n            return self.check2Trees(root.left, root.right)",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 1485
+    "line": 1649
   }
 }

@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def decodeString(self, s: str) -> str:\n        numStk = []\n        strStk = []\n        curNum = 0\n        curStr = ''\n\n        for c in s:\n            if c.isdigit():\n                curNum = 10 * curNum + int(c)\n            elif c == '[':\n                # 构造完毕, 当前数字和字符串入栈\n                numStk.append(curNum)\n                strStk.append(curStr) # 临时存放, 便于一会取出作为prevStr\n                curNum = 0\n                curStr = ''\n            elif c == ']':\n                repeat_times = numStk.pop()\n                prevStr = strStk.pop()\n                curStr = prevStr + curStr * repeat_times\n            else:\n                curStr += c\n\n        return curStr",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 646
+    "line": 626
   }
 }

@@ -4,6 +4,6 @@
   "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:\n        self.count = 0\n        self.premap = defaultdict(int)\n        self.premap[0] = 1\n        self.target = targetSum\n\n        def dfs(node, cursum):\n            if not node:\n                return\n\n            cursum += node.val\n            self.count += self.premap[cursum - self.target]\n            self.premap[cursum] += 1\n            dfs(node.left, cursum)\n            dfs(node.right, cursum)\n            self.premap[cursum] -= 1\n        # 不同起点的dfs不能互相影响, 所以要用回溯写法\n\n        dfs(root, 0)\n        return self.count",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 1825
+    "line": 2026
   }
 }

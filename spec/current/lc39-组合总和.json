@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:\n        res = []\n\n        def backtrack(path, cur, start):\n            if cur == 0:\n                res.append(path[:])\n                return\n\n            for i in range(start, len(candidates)):\n                if candidates[i] > cur:\n                    continue\n                path.append(candidates[i])\n                backtrack(path, cur - candidates[i], i) # 细节: 可以重复使用, 所以是i\n                path.pop()\n\n        candidates.sort() # 排序优化剪枝\n        backtrack([], target, 0)\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 106
+    "line": 102
   }
 }

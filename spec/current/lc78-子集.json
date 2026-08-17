@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def subsets(self, nums: List[int]) -> List[List[int]]:\n        res = []\n        def backtrack(start, path):\n            res.append(path[:])\n            for i in range(start, len(nums)):\n                path.append(nums[i])\n                backtrack(i + 1, path)\n                path.pop()\n\n        backtrack(0, [])\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 62
+    "line": 58
   }
 }

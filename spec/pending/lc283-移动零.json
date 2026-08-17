@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def moveZeroes(self, nums: List[int]) -> None:\n        \"\"\"\n        Do not return anything, modify nums in-place instead.\n        \"\"\"\n        sz = len(nums)\n        if sz == 1:\n            return\n        i, j = 0, sz - 1\n        while (i < j) and (i < sz) and (j >= 0):\n            while i < sz and nums[i] != 0:\n                i += 1\n            while j >= 0 and nums[j] == 0:\n                j -= 1\n            if i < j:\n                # 如果不需要保持其他元素的顺序, 把下面两行换成 nums[i], nums[j] = nums[j], nums[i]即可\n                nums.pop(i)\n                nums.append(0)",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 138
+    "line": 133
   }
 }

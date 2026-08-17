@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def firstMissingPositive(self, nums: List[int]) -> int:\n        n = len(nums)\n        # 清除负值\n        for i in range(n):\n            if nums[i] <= 0:\n                nums[i] = n + 1\n\n        # 利用正值进行负值哈希\n        for i in range(n):\n            num = abs(nums[i])\n            if num <= n:\n                nums[num - 1] = -abs(nums[num - 1])\n\n        # 第一个不是负值\n        for i in range(n):\n            if nums[i] > 0:\n                return i + 1\n\n        # 按顺序全部有, 那就肯定是更大的\n        return n + 1",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 698
+    "line": 766
   }
 }

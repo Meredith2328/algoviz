@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def rotate(self, matrix: List[List[int]]) -> None:\n        \"\"\"\n        Do not return anything, modify matrix in-place instead.\n        \"\"\"\n        # 顺时针90度\n        # 等于主轴对称+左右对称\n        n = len(matrix)\n        for i in range(n):\n            for j in range(i):\n                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]\n\n        for i in range(n):\n            for j in range(int(n / 2)):\n                matrix[i][j], matrix[i][n - j - 1] = matrix[i][n - j - 1], matrix[i][j]",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 867
+    "line": 911
   }
 }
