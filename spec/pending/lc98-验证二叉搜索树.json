@@ -1,0 +1,9 @@
+{
+  "id": "lc98-验证二叉搜索树",
+  "title": "98 验证二叉搜索树",
+  "code": "class Solution:\n    def isValidBST(self, root: Optional[TreeNode]) -> bool:\n        prev = float('-inf') # 相当于我们在中序遍历序列\n        stk = []\n        node = root\n        while stk or node:\n            while node:\n                stk.append(node)\n                node = node.left\n            node = stk.pop()\n            if node.val <= prev:\n                return False\n            prev = node.val\n            node = node.right\n        return True",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1859
+  }
+}

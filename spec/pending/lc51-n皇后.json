@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def solveNQueens(self, n: int) -> List[List[str]]:\n        res = []\n        board = [['.'] * n for _ in range(n)]\n        cols = set()\n        diag1 = set()\n        diag2 = set()\n\n        def backtrack(row):\n            if row == n:\n                res.append([''.join(board_row) for board_row in board])\n                return\n            for col in range(n):\n                if col in cols or (row - col) in diag1 or (row + col) in diag2:\n                    continue\n                # 做选择\n                board[row][col] = 'Q'\n                cols.add(col)\n                diag1.add(row - col)\n                diag2.add(row + col)\n                backtrack(row + 1)\n                board[row][col] = '.'\n                cols.remove(col)\n                diag1.remove(row - col)\n                diag2.remove(row + col)\n\n        backtrack(0)\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 252
+    "line": 260
   }
 }

@@ -1,0 +1,9 @@
+{
+  "id": "lc84-柱状图中最大的矩形",
+  "title": "84 柱状图中最大的矩形",
+  "code": "class Solution:\n    def largestRectangleArea(self, heights: List[int]) -> int:\n        heights = [0] + heights + [0]\n        stk = [] # 存储索引, 单调递增栈\n        max_area = 0\n        for i, h in enumerate(heights):\n            # 结算栈顶高度, 并且同一个h有可能连续结算好多个!\n            while stk and heights[stk[-1]] > h: # 关键: 我们找到的是**栈顶高度**的**两侧矮于它的高度**!\n                height = heights[stk.pop()]\n                width = i - stk[-1] - 1\n                max_area = max(max_area, height * width)\n            stk.append(i)\n        return max_area",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 715
+  }
+}

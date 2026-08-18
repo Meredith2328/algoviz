@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def reverseNums(self, nums, i, j):\n        while i < j:\n            nums[i], nums[j] = nums[j], nums[i]\n            i += 1\n            j -= 1\n\n    def nextPermutation(self, nums: List[int]) -> None:\n        \"\"\"\n        Do not return anything, modify nums in-place instead.\n        \"\"\"\n        # [1,2,3] [1,3,2] [2,1,3] [2,3,1] [3,1,2] [3,2,1]\n \n        # 定位从右往左第一个升序对 (nums[i], nums[i + 1]),\n        # 在nums[i+1:]中取大于nums[i]的最小值, 将最小值与nums[i]交换.\n        # 然后翻转nums[i+1:].\n        n = len(nums)\n        exist = False\n        for i in range(n - 2, -1, -1):\n            # 定位升序对\n            if nums[i] < nums[i + 1]:\n                exist = True\n                # 在i右边找最小元素作为待交换的元素, 注意有重复时应选择右边的\n                min_j = i + 1\n                for j in range(i + 2, n):\n                    if nums[i] < nums[j] <= nums[min_j]:\n                        min_j = j\n                # 交换, 然后把i右边翻转\n                nums[i], nums[min_j] = nums[min_j], nums[i]\n                self.reverseNums(nums, i + 1, len(nums) - 1)\n                break\n\n        if not exist:\n            self.reverseNums(nums, 0, len(nums) - 1)",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 1802
+    "line": 1844
   }
 }

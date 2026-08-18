@@ -1,9 +1,9 @@
 {
-  "id": "lc74-搜索二维矩阵-v2",
-  "title": "74 搜索二维矩阵",
+  "id": "lc34-在排序数组中查找元素的第一个和最后一个位置",
+  "title": "34 在排序数组中查找元素的第一个和最后一个位置",
   "code": "class Solution:\n    def searchRange(self, nums: List[int], target: int) -> List[int]:\n        def find_boundary(is_left: bool):\n            left, right = 0, len(nums) - 1\n            pos = -1 # 精华\n            while left <= right:\n                mid = (left + right) // 2\n                if nums[mid] == target:\n                    pos = mid # 精华\n                    if is_left:\n                        right = mid - 1\n                    else:\n                        left = mid + 1\n                elif nums[mid] < target:\n                    left = mid + 1\n                else:\n                    right = mid - 1\n            return pos\n        return [find_boundary(True), find_boundary(False)]",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 402
+    "line": 415
   }
 }

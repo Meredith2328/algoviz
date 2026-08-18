@@ -4,6 +4,6 @@
   "code": "from collections import deque\n\ndef bfs(start, graph):\n    visited = set()\n    queue = deque([start])\n    visited.add(start)  # 注意这里！！！BFS 只要无脑在入队时标记时就可以了，防止重复入队\n\n    while queue:\n        node = queue.popleft()\n        print(node)\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.add(neighbor) # 注意这里！！！同上\n                queue.append(neighbor)",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 2287
+    "line": 2335
   }
 }

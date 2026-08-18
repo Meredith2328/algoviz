@@ -1,0 +1,9 @@
+{
+  "id": "lc647-回文子串",
+  "title": "647 回文子串",
+  "code": "class Solution:\n    def countSubstrings(self, s: str) -> int:\n        res = 0\n        n = len(s)\n        \n        def expand(left, right):\n            cnt = 0\n            while left >= 0 and right < n and s[left] == s[right]:\n                cnt += 1\n                left -= 1\n                right += 1\n            return cnt\n        \n        for i in range(n):\n            res += expand(i, i)\n            res += expand(i, i + 1)\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 481
+  }
+}

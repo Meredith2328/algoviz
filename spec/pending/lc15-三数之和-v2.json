@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def threeSum(self, nums: List[int]) -> List[List[int]]:\n        # 固定一个左指针, 从右往左拉, 如果能重合则左指针以后的情况全部剪枝\n        nums.sort()\n        n = len(nums)\n        res = []\n        for k in range(n):\n            # 遍历的数不能重复\n            if (k > 0 and nums[k] == nums[k - 1]):\n                continue\n            target = -nums[k]\n            j = n - 1 # 玄妙: 对于更大的i, 一定不需要已遍历过的j\n            for i in range(k + 1, n):\n                if (i > k+1 and nums[i] == nums[i - 1]):\n                    continue\n                while (i < j and nums[i] + nums[j] > target):\n                       j -= 1\n                       if i == j:\n                       break\n                       if nums[i] + nums[j] == target:\n                       res.append([nums[i], nums[j], nums[k]])\n                       return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 218
+    "line": 225
   }
 }

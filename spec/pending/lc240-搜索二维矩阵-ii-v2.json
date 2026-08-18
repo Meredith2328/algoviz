@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:\n        x, y = 0, len(matrix[0]) - 1\n        while x < len(matrix) and y >= 0:\n            if target == matrix[x][y]:\n                return True\n            elif target < matrix[x][y]:\n                y -= 1\n            else:\n                x += 1\n        return False",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 945
+    "line": 968
   }
 }

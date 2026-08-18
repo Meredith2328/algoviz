@@ -1,0 +1,9 @@
+{
+  "id": "lc121-买卖股票的最佳时机",
+  "title": "121 买卖股票的最佳时机",
+  "code": "class Solution:\n    def maxProfit(self, prices: List[int]) -> int:\n        lowest = float('inf')\n        res = 0\n        for price in prices:\n            lowest = min(lowest, price)\n            res = max(res, price - lowest)\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 947
+  }
+}

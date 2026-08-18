@@ -55,18 +55,22 @@ PROB_RE = re.compile(r"(\d{1,4})\s*[\.\、\s]\s*([^\n]{2,40})")
 
 def find_problem(lines_before: list[str], limit: int = 40) -> tuple[str, str] | None:
     """Nearest 题号 heading/line above the block: returns (num, title).
-    algoviz embed lines are transparent (they sit between heading and code)."""
+    algoviz embed lines are transparent (they sit between heading and code).
+    Matches plain headings ("543 二叉树的直径") and markdown-link headings
+    ("[102. 二叉树的层序遍历](https://...)")."""
     cand = [l for l in lines_before
             if not l.strip().startswith('<div class="algoviz"')]
+    link_re = re.compile(r"^\[(\d{1,4})[.\、\s]+([^\]]+)\]\(")
     for ln in reversed(cand[-limit:]):
         s = ln.strip().lstrip("#").strip()
-        if not s:
+        if not s or set(s) <= {"-", "=", " ", "#"}:
             continue
         m = re.match(r"^(\d{1,4})[\.\、\s]+(.+)$", s)
         if m:
             return m.group(1), m.group(2).strip()
-        if set(s) <= {"-", "=", " ", "#"}:
-            continue
+        m = link_re.match(s)
+        if m:
+            return m.group(1), m.group(2).strip()
     return None
 
 

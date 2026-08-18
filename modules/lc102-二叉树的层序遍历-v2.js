@@ -1,8 +1,8 @@
 (function (global) {
   global.AlgoVizModules = global.AlgoVizModules || {};
 
-  global.AlgoVizModules["lc543-二叉树的直径-v2"] = {
-    title: "543 二叉树的直径 · 层序遍历",
+  global.AlgoVizModules["lc102-二叉树的层序遍历-v2"] = {
+    title: "102 二叉树的层序遍历 · 每层整批",
     language: "python",
     code: [
       "# Definition for a binary tree node.",

@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def jump(self, nums: List[int]) -> int:\n        minStep = [float('inf')] * len(nums)\n        minStep[-1] = 0\n        for i in range(len(nums) - 2, -1, -1):\n            # 对于某个下标i, 遍历它可达的所有下标, 选取其中跳跃到最后下标的最小值.\n            for j in range(i + 1, min(len(nums), i + nums[i] + 1)):\n                minStep[i] = min(minStep[i], minStep[j] + 1)\n        return minStep[0]",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 965
+    "line": 987
   }
 }

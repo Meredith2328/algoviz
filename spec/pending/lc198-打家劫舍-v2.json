@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def rob(self, nums: List[int]) -> int:\n        if len(nums) == 1:\n            return nums[0]\n\n        prev2 = nums[0]\n        prev1 = max(nums[0], nums[1])\n        for i in range(2, len(nums)):\n            cur = max(prev2 + nums[i], prev1)\n            prev2 = prev1\n            prev1 = cur\n        return prev1",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 1141
+    "line": 1169
   }
 }

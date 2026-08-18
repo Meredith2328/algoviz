@@ -4,6 +4,6 @@
   "code": "class MinStack:\n\n    def __init__(self):\n        # 两个结构各自实现栈和最小\n        self.stk = []\n        self.minStk = []\n\n    def push(self, val: int) -> None:\n        self.stk.append(val)\n        i = bisect.bisect_left(self.minStk, val)\n        self.minStk.insert(i, val)\n\n    def pop(self) -> None:\n        val = self.stk.pop()\n        i = bisect.bisect_left(self.minStk, val)\n        self.minStk.pop(i)\n\n    def top(self) -> int:\n        return self.stk[-1]\n\n    def getMin(self) -> int:\n        return self.minStk[0]\n\n\n        # Your MinStack object will be instantiated and called as such:\n        # obj = MinStack()\n        # obj.push(val)\n        # obj.pop()\n        # param_3 = obj.top()\n# param_4 = obj.getMin()",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 571
+    "line": 586
   }
 }

@@ -1,0 +1,9 @@
+{
+  "id": "lc98-验证二叉搜索树-v2",
+  "title": "98 验证二叉搜索树",
+  "code": "class Solution:\n    def isValidBST(self, root: Optional[TreeNode]) -> bool:\n        def helper(node, lower = float('-inf'), upper = float('inf')):\n            if not node:\n                return True\n            val = node.val\n            if val <= lower or val >= upper:\n                return False\n            if not helper(node.left, lower, val):\n                return False\n            if not helper(node.right, val, upper):\n                return False\n            return True\n        return helper(root)",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1885
+  }
+}

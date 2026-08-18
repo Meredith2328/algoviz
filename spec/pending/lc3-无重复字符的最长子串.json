@@ -1,0 +1,9 @@
+{
+  "id": "lc3-无重复字符的最长子串",
+  "title": "3 无重复字符的最长子串",
+  "code": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        visited = set()\n        left = 0\n        maxLen = 0\n        for right, ch in enumerate(s): # 闭区间窗口 [left, right]\n            while ch in visited:\n                visited.remove(s[left])\n                left += 1\n            visited.add(ch)\n            maxLen = max(maxLen, right - left + 1)\n        return maxLen",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 366
+  }
+}

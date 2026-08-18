@@ -1,0 +1,9 @@
+{
+  "id": "lc297-二叉树的序列化与反序列化",
+  "title": "297 二叉树的序列化与反序列化",
+  "code": "# Definition for a binary tree node.\n# class TreeNode(object):\n#     def __init__(self, x):\n#         self.val = x\n#         self.left = None\n#         self.right = None\n\nclass Codec:\n\n    def serialize(self, root):\n        \"\"\"Encodes a tree to a single string.\"\"\"\n        def dfs(node):\n            if not node:\n                return '#,'\n            return str(node.val) + ',' + dfs(node.left) + dfs(node.right)\n        return dfs(root)\n\n    def deserialize(self, data):\n        \"\"\"Decodes your encoded data to tree.\"\"\"\n        vals = data.split(',')\n        self.idx = 0\n        def dfs():\n            if vals[self.idx] == '#':\n                self.idx += 1\n                return None\n            root = TreeNode(int(vals[self.idx])) # 根左右\n            self.idx += 1\n            root.left = dfs()\n            root.right = dfs()\n            return root\n        return dfs()\n        \n\n# Your Codec object will be instantiated and called as such:\n# ser = Codec()\n# deser = Codec()\n# ans = deser.deserialize(ser.serialize(root))",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 2234
+  }
+}

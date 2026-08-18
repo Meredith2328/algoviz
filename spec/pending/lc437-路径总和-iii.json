@@ -4,6 +4,6 @@
   "code": "# Definition for a binary tree node.\n# class TreeNode:\n#     def __init__(self, val=0, left=None, right=None):\n#         self.val = val\n#         self.left = left\n#         self.right = right\nclass Solution:\n    def pathSum(self, root: Optional[TreeNode], targetSum: int) -> int:\n        if not root:\n            return 0\n\n        def countPaths(node, targetSum):\n            # 计算从某节点开始的和为targerSum的路径数量.\n            # 注意, 这个数量是和从其他节点开始的和为targetSum的路径数量无关的.\n            if not node:\n                return 0\n            count = 1 if node.val == targetSum else 0\n            count += countPaths(node.left, targetSum - node.val)\n            count += countPaths(node.right, targetSum - node.val)\n            return count\n\n        # 对所有节点调用countPaths并求和\n        return countPaths(root, targetSum) + self.pathSum(root.left, targetSum) + self.pathSum(root.right, targetSum)\n",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 1999
+    "line": 2043
   }
 }

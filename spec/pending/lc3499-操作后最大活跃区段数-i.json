@@ -1,0 +1,9 @@
+{
+  "id": "lc3499-操作后最大活跃区段数-i",
+  "title": "3499 操作后最大活跃区段数 I",
+  "code": "class Solution:\n    def maxActiveSectionsAfterTrade(self, s: str) -> int:\n        original_cnt = s.count('1')\n        t = '1' + s + '1'\n        group = []\n\n        i = 0\n        while i < len(t): # 这一段双指针相当于把连续区块整理成group\n            j = i\n            while j < len(t) and t[j] == t[i]: # 连续区块 [i, j)\n                j += 1\n            length = j - i\n            group.append((t[i], length)) # 连续区块保存为 (字符, 长度)\n            i = j\n\n        max_cnt = 0\n        for i in range(2, len(group) - 2):\n            if group[i - 2][0] == '1' and group[i - 1][0] == '0' and group[i][0] == '1' and \\\n            group[i + 1][0] == '0' and group[i + 2][0] == '1':\n                max_cnt = max(max_cnt, group[i - 1][1] + group[i + 1][1])\n        return original_cnt + max_cnt",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-6.md",
+    "line": 27
+  }
+}

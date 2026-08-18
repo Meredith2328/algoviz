@@ -1,0 +1,9 @@
+{
+  "id": "lc287-寻找重复数",
+  "title": "287 寻找重复数",
+  "code": "class Solution:\n    def findDuplicate(self, nums: List[int]) -> int:\n        n = len(nums)\n        for i in range(n):\n            absval = abs(nums[i])\n            if nums[absval] < 0:\n                return absval\n            nums[absval] = -nums[absval]\n        return -1",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1889
+  }
+}

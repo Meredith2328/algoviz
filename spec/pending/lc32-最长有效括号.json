@@ -1,0 +1,9 @@
+{
+  "id": "lc32-最长有效括号",
+  "title": "32 最长有效括号",
+  "code": "class Solution:\n    def longestValidParentheses(self, s: str) -> int:\n        max_len = 0\n        left = right = 0 # 计数器\n        for ch in s:\n            if ch == '(':\n                left += 1\n            else:\n                right += 1\n            if left == right:\n                max_len = max(max_len, left * 2)\n            elif left < right: # 不满足前缀条件\n                left = right = 0\n\n        left = right = 0 # 第二次遍历之前一定要重置!\n        for ch in reversed(s):\n            if ch == '(':\n                left += 1\n            else:\n                right += 1\n            if left == right:\n                max_len = max(max_len, left * 2)\n            elif left > right: # 不满足后缀条件\n                left = right = 0\n        \n        return max_len",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1435
+  }
+}

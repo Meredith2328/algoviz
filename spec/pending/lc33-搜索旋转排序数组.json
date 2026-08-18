@@ -1,0 +1,9 @@
+{
+  "id": "lc33-搜索旋转排序数组",
+  "title": "33 搜索旋转排序数组",
+  "code": "class Solution:\n    def search(self, nums: List[int], target: int) -> int:\n        left, right = 0, len(nums) - 1\n        while left <= right:\n            mid = (left + right) // 2\n            if nums[mid] == target:\n                return mid\n            if nums[left] <= nums[mid]: # 为了能用有序区间的条件判断, 我们需要先确定有序区间\n                if nums[left] <= target < nums[mid]:  # mid已排除\n                    right = mid - 1                   # mid已排除\n                else:\n                    left = mid + 1                    # mid已排除\n            else:\n                if nums[mid] < target <= nums[right]: # mid已排除\n                    left = mid + 1                    # mid已排除\n                else:\n                    right = mid - 1                   # mid已排除\n        return -1",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 452
+  }
+}

@@ -1,9 +1,9 @@
 {
   "id": "lc560-和为-k-的子数组",
   "title": "560 和为 K 的子数组",
-  "code": "class Solution:\n    def subarraySum(self, nums: List[int], k: int) -> int:\n        n, res = len(nums), 0\n        for i in range(n):\n            for j in range(i, n):\n                if sum(nums[i:j+1]) == k:\n                    res += 1\n        return res",
+  "code": "class Solution:\n    def subarraySum(self, nums: List[int], k: int) -> int:\n        prefix_sum = defaultdict(int) # 前缀和:个数\n        prefix_sum[0] = 1\n        cur_sum = 0\n        res = 0\n        for num in nums:\n            cur_sum += num\n            if cur_sum - k in prefix_sum:\n                res += prefix_sum[cur_sum - k]\n            prefix_sum[cur_sum] += 1\n        return res",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 501
+    "line": 108
   }
 }

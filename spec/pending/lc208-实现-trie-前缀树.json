@@ -1,0 +1,9 @@
+{
+  "id": "lc208-实现-trie-前缀树",
+  "title": "208 实现 Trie (前缀树)",
+  "code": "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n\n    def __init__(self):\n        self.root = TrieNode()\n\n    def insert(self, word: str) -> None:\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            node = node.children[ch]\n        node.is_end = True\n\n    def search(self, word: str) -> bool:\n        node = self._findNode(word)\n        return node is not None and node.is_end\n\n    def startsWith(self, prefix: str) -> bool:\n        node = self._findNode(prefix)\n        return node is not None\n\n    def _findNode(self, prefix: str) -> TrieNode:\n        node = self.root\n        for ch in prefix: # O(L)\n            if ch not in node.children:\n                return None\n            node = node.children[ch]\n        return node\n\n\n# Your Trie object will be instantiated and called as such:\n# obj = Trie()\n# obj.insert(word)\n# param_2 = obj.search(word)\n# param_3 = obj.startsWith(prefix)",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 2550
+  }
+}

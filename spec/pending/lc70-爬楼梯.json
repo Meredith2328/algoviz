@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def climbStairs(self, n: int) -> int:\n        # 问题的解由子问题的解组成.\n        # a[n] = a[n - 1] + a[n - 2]\n        a = [1, 1]\n        for i in range(2, n + 1):\n            a.append(a[i - 1] + a[i - 2])\n        return a[n]",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 1094
+    "line": 1119
   }
 }

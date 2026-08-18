@@ -1,0 +1,9 @@
+{
+  "id": "lc62-不同路径",
+  "title": "62 不同路径",
+  "code": "class Solution:\n    def uniquePaths(self, m: int, n: int) -> int:\n        return math.comb(m + n - 2, min(m, n) - 1)",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1500
+  }
+}

@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def findMin(self, nums: List[int]) -> int:\n        l, r = 0, len(nums) - 1\n        minVal = nums[0]\n        while l <= r:\n            mid = (l + r) // 2\n            if nums[mid] < minVal:\n                minVal = min(minVal, nums[mid])\n            else:\n                if nums[l] <= nums[mid]:\n                    # 有序\n                    minVal = min(minVal, nums[l])\n                    l = mid + 1\n                else:\n                    minVal = min(minVal, nums[mid + 1])\n                    r = mid - 1\n        return minVal",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 466
+    "line": 480
   }
 }

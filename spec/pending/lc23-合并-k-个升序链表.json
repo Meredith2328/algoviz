@@ -1,0 +1,9 @@
+{
+  "id": "lc23-合并-k-个升序链表",
+  "title": "23 合并 K 个升序链表",
+  "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:\n        heap = []\n        for i, node in enumerate(lists):\n            if node:\n                heapq.heappush(heap, (node.val, i, node)) # 多存一个i是为了避免比较时比较到node\n        dummy = ListNode()\n        cur = dummy\n        while heap:\n            val, i, node = heapq.heappop(heap)\n            cur.next = node\n            cur = cur.next\n            if node.next:\n                heapq.heappush(heap, (node.next.val, i, node.next))\n        return dummy.next",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1407
+  }
+}

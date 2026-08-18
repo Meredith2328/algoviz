@@ -1,0 +1,9 @@
+{
+  "id": "lc438-找到字符串中所有字母异位词",
+  "title": "438 找到字符串中所有字母异位词",
+  "code": "class Solution:\n    def findAnagrams(self, s: str, p: str) -> List[int]:\n        p_freq, w_freq = [0] * 26, [0] * 26\n        res = []\n        for ch in p:\n            p_freq[ord(ch) - ord('a')] += 1\n        left = 0\n        for right, ch in enumerate(s):\n            w_freq[ord(ch) - ord('a')] += 1\n            if right - left + 1 == len(p): # 稳定大小的滑窗写法\n                if p_freq == w_freq:\n                    res.append(left)\n                w_freq[ord(s[left]) - ord('a')] -= 1\n                left += 1\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 405
+  }
+}

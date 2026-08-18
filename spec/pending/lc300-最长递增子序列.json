@@ -1,0 +1,9 @@
+{
+  "id": "lc300-最长递增子序列",
+  "title": "300 最长递增子序列",
+  "code": "class Solution:\n    def lengthOfLIS(self, nums: List[int]) -> int:\n        tails = [] # 递增的, tails[i]表示长度为i+1的递增子序列的最小末尾值\n        for num in nums:\n            left, right = 0, len(tails)\n            while left < right:\n                mid = (left + right) // 2\n                if tails[mid] < num: # 二分目的: 在tails中找到第一个>=num的值\n                    left = mid + 1\n                else:\n                    right = mid\n\n            if left == len(tails):\n                tails.append(num)\n            else:\n                tails[left] = num\n        return len(tails)",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1074
+  }
+}

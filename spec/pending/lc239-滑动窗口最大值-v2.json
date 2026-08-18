@@ -1,9 +1,9 @@
 {
   "id": "lc239-滑动窗口最大值-v2",
   "title": "239 滑动窗口最大值",
-  "code": "class Solution:\n    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:\n        # 维护单调队列\n        # 每次都首先移除队尾比它小的元素, 然后再加入, 这样就会使得队列始终是单调递减的\n        q = deque()\n        res = []\n        for i, num in enumerate(nums):\n            # 移除队尾比num小的元素\n            while q and q[-1][1] < num:\n                q.pop()\n            q.append((i, num))\n            # 移除队头不在窗口内的元素\n            while q and q[0][0] <= i - k:\n                q.popleft()\n\n            if i >= k - 1:\n                res.append(q[0][1])\n        return res",
+  "code": "class Solution:\n    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:\n        # 最大堆, 所以存储 (-num, i)\n        # 堆顶是heap[0]\n        heap = []\n        result = []\n        for i, num in enumerate(nums):\n            heapq.heappush(heap, (-num, i))\n            if i >= k - 1:\n                # 已存入长度为k的元素\n                # 窗口应该是 [i - k + 1, i] 这k个元素\n                while heap and heap[0][1] <= i - k:\n                    heapq.heappop(heap)\n                result.append(-heap[0][0])\n        return result",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 319
+    "line": 300
   }
 }

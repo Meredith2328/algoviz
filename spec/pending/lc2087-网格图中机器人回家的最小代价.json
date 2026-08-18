@@ -1,0 +1,9 @@
+{
+  "id": "lc2087-网格图中机器人回家的最小代价",
+  "title": "2087 网格图中机器人回家的最小代价",
+  "code": "class Solution:\n    def minCost(self, startPos: List[int], homePos: List[int], rowCosts: List[int], colCosts: List[int]) -> int:\n        # 由于权值全为非负, 肯定直走的代价是最小的\n        res = 0\n        x, y = startPos\n        tx, ty = homePos\n        if tx > x:\n            res += sum(rowCosts[x + 1 : tx + 1]) # x那一行不取到\n        else:\n            res += sum(rowCosts[tx : x])\n        \n        if ty > y:\n            res += sum(colCosts[y + 1 : ty + 1])\n        else:\n            res += sum(colCosts[ty : y])\n        return res",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-6.md",
+    "line": 57
+  }
+}

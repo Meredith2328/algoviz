@@ -4,6 +4,6 @@
   "code": "class Solution:\n    def findKthLargest(self, nums: List[int], k: int) -> int:\n        nums = [-x for x in nums]\n        heapq.heapify(nums)\n        for i in range(k - 1):\n            heapq.heappop(nums)\n        return -heapq.heappop(nums)",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
-    "line": 818
+    "line": 837
   }
 }

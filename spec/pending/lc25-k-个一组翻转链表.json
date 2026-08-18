@@ -1,0 +1,9 @@
+{
+  "id": "lc25-k-个一组翻转链表",
+  "title": "25 K 个一组翻转链表",
+  "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:\n        def reverse(head, tail): # head和tail从来都不动\n            front = tail.next\n            cur = head\n            while front != tail:\n                nxt = cur.next\n                cur.next = front\n                front = cur\n                cur = nxt\n            return tail, head\n        \n        dummy = ListNode(0, head)\n        prev = dummy\n        while head:\n            tail = prev\n            for _ in range(k):\n                tail = tail.next\n                if not tail:\n                    return dummy.next\n            \n            nxt = tail.next\n            head, tail = reverse(head, tail)\n            prev.next = head\n            tail.next = nxt\n            prev = tail\n            head = nxt\n\n        return dummy.next",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
+    "line": 1305
+  }
+}

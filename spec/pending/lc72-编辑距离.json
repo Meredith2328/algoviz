@@ -1,0 +1,9 @@
+{
+  "id": "lc72-编辑距离",
+  "title": "72 编辑距离",
+  "code": "class Solution:\n    def minDistance(self, word1: str, word2: str) -> int:\n        # 关键: 使用右边界, 所以需要多开一个, 而且判断时需要用-1\n        m, n = len(word1), len(word2)\n        # dp[i][j] 代表将word1[:i]转化成word2[:j]的最小操作数\n        dp = [j for j in range(n + 1)]\n\n        for i in range(1, m + 1):\n            prev = dp[0]\n            dp[0] = i # 用来存储当前行的dp初值\n            for j in range(1, n + 1):\n                tmp = dp[j]\n                if word1[i - 1] == word2[j - 1]:\n                    dp[j] = prev\n                else:\n                    dp[j] = 1 + min(dp[j], dp[j - 1], prev)\n                prev = tmp\n        return dp[n]",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 1675
+  }
+}

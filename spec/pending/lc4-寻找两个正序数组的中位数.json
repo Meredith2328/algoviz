@@ -1,0 +1,9 @@
+{
+  "id": "lc4-寻找两个正序数组的中位数",
+  "title": "4 寻找两个正序数组的中位数",
+  "code": "class Solution:\n    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:\n        if len(nums1) > len(nums2):\n            nums1, nums2 = nums2, nums1\n        m, n = len(nums1), len(nums2)\n        total_left = (m + n + 1) // 2 # 左半比右半多一个元素\n\n        left, right = 0, m # 关键!\n        # 这里的i搜索的是\"分割点左边的数量\"而不是\"下标\", 所以不是闭着眼睛用0, m-1初始化, 而是0, m才正确!\n        while left <= right:\n            i = (left + right) // 2  # 两行最关键的代码\n            j = total_left - i\n            nums1_left_max = float('-inf') if i == 0 else nums1[i - 1]\n            nums1_right_min = float('inf') if i == m else nums1[i]\n            nums2_left_max = float('-inf') if j == 0 else nums2[j - 1]\n            nums2_right_min = float('inf') if j == n else nums2[j]\n            if nums1_left_max <= nums2_right_min and nums2_left_max <= nums1_right_min:\n                if (m + n) % 2 == 1:\n                    return max(nums1_left_max, nums2_left_max)\n                else:\n                    return (max(nums1_left_max, nums2_left_max) + min(nums1_right_min, nums2_right_min)) / 2.0\n            elif nums1_left_max > nums2_right_min:\n                right = i - 1\n            else:\n                left = i + 1\n        return -1",
+  "source": {
+    "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md",
+    "line": 520
+  }
+}

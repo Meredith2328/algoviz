@@ -4,6 +4,6 @@
   "code": "# Definition for singly-linked list.\n# class ListNode:\n#     def __init__(self, val=0, next=None):\n#         self.val = val\n#         self.next = next\nclass Solution:\n    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:\n        # 把l2加到l1上\n        cur1, cur2 = l1, l2\n        while cur1.next != None and cur2.next != None:\n            cur1.val += cur2.val\n            cur1 = cur1.next\n            cur2 = cur2.next\n        if cur1.next == None:\n            cur1.next = cur2.next\n        cur1.val += cur2.val\n\n        # flatten\n        cur1 = l1\n        while cur1:\n            if cur1.val >= 10:\n                if cur1.next:\n                    cur1.next.val += cur1.val // 10\n                else:\n                    cur1.next = ListNode(cur1.val // 10)\n                cur1.val %= 10\n            cur1 = cur1.next\n\n        return l1",
   "source": {
     "post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md",
-    "line": 1158
+    "line": 1188
   }
 }
