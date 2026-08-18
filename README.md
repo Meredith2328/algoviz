@@ -92,4 +92,4 @@ python tools/validate_manifest.py --strict   # 供 CI：有 WARN 也退出 1
 ## 模块格式
 
 见 `spec/module-format.md`（视图状态形状、parseInput 约定、ES5 限制等）。
-`modules/two-sum.js` 是手写参考实现。
+`examples/two-sum.js` 是手写参考实现（格式示例，不参与同步/索引）。

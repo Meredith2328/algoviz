@@ -34,7 +34,7 @@ API_URL = "https://api.deepseek.com/v1/chat/completions"
 with open(ROOT / "spec" / "module-format.md", encoding="utf-8") as f:
     FORMAT_SPEC = f.read()
 
-with open(ROOT / "modules" / "two-sum.js", encoding="utf-8") as f:
+with open(ROOT / "examples" / "two-sum.js", encoding="utf-8") as f:
     REFERENCE_MODULE = f.read()
 
 
