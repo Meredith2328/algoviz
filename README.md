@@ -54,9 +54,30 @@ algoviz/
 python tools/generate.py spec/pending/my-problem.json
 # 3) 验证器独立可用
 node tools/validate.js modules/my-problem.js
-# 4) 同步到两个项目
+# 4) 同步到两个项目（同步前自动跑完整性校验，不过则中止）
 python tools/sync_integrations.py
 ```
+
+## 校验与同步（防线上事故）
+
+`tools/validate_manifest.py` 在**每次同步前自动运行**，把历史上出过的事故拦在提交前：
+
+| 检查项 | 拦截的事故 |
+|---|---|
+| 文件名 ≤200 字节、无非法字符 | 286 字节文件名超 Linux 255 上限 → 下游 Actions checkout 失败、整站部署中断 |
+| manifest 引用与 modules/ 文件一一对应 | manifest 提交了但 JS 漏提交 → 线上 404 |
+| modules.json 与 modules/ 同步 | 新增模块后清单未重建 → 消费方拿到过期数据 |
+| `node --check` 全量语法校验 | 半成品/损坏模块进入镜像 |
+| 下游镜像（leetgotya/pilog）与源一致 | 同步中断留下的半成品状态 |
+
+```bash
+python tools/validate_manifest.py            # 日常自检
+python tools/validate_manifest.py --strict   # 供 CI：有 WARN 也退出 1
+```
+
+命名约定：`lc<题号>-<短名>[-vN].js`。**文件名务必短**（长描述放模块内 `title` 字段），
+同题多版本用 `-v2`/`-v3` 后缀，下游按版本号取最高。提交镜像时 manifest 与 modules/
+必须在**同一个 commit** 里（`git add algoviz/` 整目录一起加）。
 
 [leetgotya](https://meredith2328.github.io/leetgotya/) 里已接好：揭示面板对预存的题目显示「▶ 步骤可视化」按钮
 （通过 `algoviz/manifest.json` 的题号映射）。

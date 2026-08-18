@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -23,6 +24,23 @@ PILOG = Path("C:/desktoppp/pilog")
 LEETGOTYA = Path("C:/desktoppp/leetgotya")
 
 LC_RE = re.compile(r"^lc(\d+)-")
+
+
+def validate() -> None:
+    """同步前跑完整性校验（文件名长度/引用一致/JS 语法），不过则中止。
+
+    历史事故：286 字节文件名导致下游 Actions checkout 失败；
+    manifest 引用未入库模块导致线上 404。见 tools/validate_manifest.py。
+    """
+    r = subprocess.run(
+        [sys.executable, str(ROOT / "tools" / "validate_manifest.py"),
+         "--skip-sync-check"],
+        cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace",
+    )
+    sys.stdout.write(r.stdout)
+    sys.stderr.write(r.stderr)
+    if r.returncode != 0:
+        sys.exit("校验未通过，已中止同步（先修复上述 ERROR 再同步）")
 
 
 def build_manifest() -> dict:
@@ -65,6 +83,7 @@ def sync(target_dir: Path, name: str = "algoviz") -> None:
 
 def main() -> None:
     which = sys.argv[1] if len(sys.argv) > 1 else "all"
+    validate()
     if which in ("all", "pilog"):
         sync(PILOG / "generator" / "static", "algoviz-player")
     if which in ("all", "leetgotya"):
