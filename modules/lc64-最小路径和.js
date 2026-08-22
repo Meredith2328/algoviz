@@ -29,11 +29,7 @@
       "grid = [[1,2,3],[4,5,6]]",
       "grid = [[5]]"
     ],
-    expectedOutputs: [
-      "7",
-      "8",
-      "5"
-    ],
+    expectedOutputs: ["7", "12", "5"],
 
     views: {
       vars: { type: "vars", title: "变量" },

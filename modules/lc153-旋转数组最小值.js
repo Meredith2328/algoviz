@@ -28,7 +28,7 @@
     defaultInput: "nums = [4, 5, 6, 7, 0, 1, 2]",
     inputHint: "每行一个变量，格式如 nums = [4, 5, 6, 7, 0, 1, 2]",
     testInputs: ["nums = [1]", "nums = [3, 4, 5, 1, 2]"],
-    expectedOutputs: ["1", "1", "1"],
+    expectedOutputs: ["0", "1", "1"],
 
     views: {
       vars: { type: "vars", title: "变量" },

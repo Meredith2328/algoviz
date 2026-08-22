@@ -26,10 +26,7 @@
       "intervals = [[1,4],[4,5]]",
       "intervals = []"
     ],
-    expectedOutputs: [
-      "[[1,5]]",
-      "[]"
-    ],
+    expectedOutputs: ["[[1,6],[8,10],[15,18]]", "[[1,5]]", "[]"],
 
     views: {
       vars: { type: "vars", title: "变量" },

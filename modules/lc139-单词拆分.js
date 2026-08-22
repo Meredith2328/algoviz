@@ -28,10 +28,7 @@
       "s = \"applepenapple\"\nwordDict = [\"apple\", \"pen\"]",
       "s = \"catsandog\"\nwordDict = [\"cats\", \"dog\", \"sand\", \"and\", \"cat\"]"
     ],
-    expectedOutputs: [
-      "true",
-      "false"
-    ],
+    expectedOutputs: ["true", "true", "false"],
 
     views: {
       vars: { type: "vars", title: "变量" },

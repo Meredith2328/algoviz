@@ -42,6 +42,11 @@ function describe(mod) {
     hasRun: typeof mod.run === "function",
     inputCount: 1 + ((mod.testInputs || []).length),
     expectedOutputs: Array.isArray(mod.expectedOutputs) ? mod.expectedOutputs : null,
+    // raw input texts in order (default first) — consumers that need the real
+    // testcases should read these instead of regexing the module source
+    inputTexts: [mod.defaultInput].concat(mod.testInputs || []).map(function (t) {
+      return typeof t === "string" ? t : (t == null ? null : String(t));
+    }),
   };
 }
 

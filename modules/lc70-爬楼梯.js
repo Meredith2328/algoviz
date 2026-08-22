@@ -19,7 +19,7 @@
     defaultInput: "n = 5",
     inputHint: "每行一个变量，格式如 n = 5",
     testInputs: ["n = 1", "n = 10"],
-    expectedOutputs: ["8", "89"],
+    expectedOutputs: ["8", "1", "89"],
 
     views: {
       vars: { type: "vars", title: "变量" },

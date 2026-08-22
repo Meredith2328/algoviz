@@ -26,10 +26,7 @@
       "strs = [\"\"]",
       "strs = [\"a\"]"
     ],
-    expectedOutputs: [
-      "[[\"\"]]",
-      "[[\"a\"]]"
-    ],
+    expectedOutputs: ["[[\"eat\",\"tea\",\"ate\"],[\"tan\",\"nat\"],[\"bat\"]]", "[[\"\"]]", "[[\"a\"]]"],
 
     views: {
       vars: { type: "vars", title: "变量" },

@@ -23,7 +23,7 @@
     defaultInput: "nums = [1, 2, 3]",
     inputHint: "每行一个变量，格式如 nums = [1, 2, 3]",
     testInputs: ["nums = []", "nums = [1, 2]"],
-    expectedOutputs: ["[[],[1],[2],[1,2]]", "[[],[1],[2],[1,2]]"],
+    expectedOutputs: ["[[],[1],[1,2],[1,2,3],[1,3],[2],[2,3],[3]]", "[[]]", "[[],[1],[1,2],[2]]"],
 
     views: {
       vars: { type: "vars", title: "变量" },

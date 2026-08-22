@@ -40,10 +40,7 @@
       "2 5\n2 3",
       "1 0\n5"
     ],
-    expectedOutputs: [
-      "1",
-      "1"
-    ],
+    expectedOutputs: ["7", "2", "1"],
 
     views: {
       vars: { type: "vars", title: "变量" },

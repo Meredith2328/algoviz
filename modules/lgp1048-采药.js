@@ -30,11 +30,7 @@
       "5 2\n2 3\n3 4",
       "1 1\n2 5"
     ],
-    expectedOutputs: [
-      "10",
-      "5",
-      "0"
-    ],
+    expectedOutputs: ["11", "7", "0"],
 
     views: {
       vars: { type: "vars", title: "变量" },

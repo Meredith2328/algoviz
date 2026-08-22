@@ -34,10 +34,7 @@
       "candidates = [2, 3, 5]\ntarget = 8",
       "candidates = [2]\ntarget = 1"
     ],
-    expectedOutputs: [
-      "[[2,2,2,2],[2,3,3],[3,5]]",
-      "[]"
-    ],
+    expectedOutputs: ["[[2,2,3],[7]]", "[[2,2,2,2],[2,3,3],[3,5]]", "[]"],
 
     views: {
       vars: { type: "vars", title: "变量" },

@@ -29,6 +29,7 @@ algoviz/
     ├── cpp_truth.py          C++ 题解用 g++ 编译跑真实 expectedOutputs（OJ/main 型）
     ├── validate.py           验证器（结构/行号/步数/输出全检，模块在隔离子进程里跑）
     ├── validate_runner.js    被 node 预加载的取数 runner（配合 validate.py）
+    ├── fix_expected_outputs.py 用真值校正模块的 expectedOutputs（数量错位/值不符）
     ├── build_modules_json.py 重建 modules.json（lc→lgp→oj 排序）
     ├── embed_in_blog.py      把 <div class="algoviz">… 嵌到 pilog 文章代码块上方
     └── sync_integrations.py  同步 player+modules 到 pilog / leetgotya
@@ -83,6 +84,25 @@ python tools/sync_integrations.py
 python tools/validate_manifest.py            # 日常自检
 python tools/validate_manifest.py --strict   # 供 CI：有 WARN 也退出 1
 ```
+
+全量跑一遍模块自检（每个模块在隔离子进程里执行，输出与 `expectedOutputs` 比对）：
+
+```bash
+python tools/validate.py modules/*.js        # 现状：298 条 ok / 3 条已知差异
+python tools/fix_expected_outputs.py         # 预演：用真值校正 expectedOutputs
+python tools/fix_expected_outputs.py --apply --also-values
+```
+
+**3 条已知差异**（非模块缺陷，无需再排查）：
+
+| 模块 | 差异 | 原因 |
+|---|---|---|
+| `lc141-环形链表` | `true` vs `false` | 真值 harness 只给第一个链表参数按 `pos` 成环，无环用例建模不了 |
+| `lc160-相交链表` | `null` vs `8` | 需按 `skipA/skipB` 把两链表在交点接起来，harness 未建模 |
+| `lc347-前k个高频元素` | `[2,-1]` vs `[-1,2]` | 同频元素顺序：Python 的 sort 稳定按插入序，两种输出都是合法答案 |
+
+`tools/fix_expected_outputs.py` 里的 `UNTRUSTED_TRUTH` 列出真值不可采信的模块（含上面两例
+及 `lc236`——答案是树节点，harness 会把整棵子树序列化），修复脚本不会覆盖它们的期望值。
 
 命名约定：`lc<题号>-<短名>[-vN].js`（LeetCode）、`lgp<题号>-<短名>.js`（洛谷）、
 `oj<题号>-<短名>.js`（其他机试题，如 noobdream）。**文件名务必短**（长描述放模块内 `title` 字段），

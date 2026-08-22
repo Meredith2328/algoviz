@@ -32,10 +32,7 @@
       "nums = [1]\ntarget = 0",
       "nums = [4, 5, 6, 7, 0, 1, 2]\ntarget = 3"
     ],
-    expectedOutputs: [
-      "-1",
-      "-1"
-    ],
+    expectedOutputs: ["4", "-1", "-1"],
 
     views: {
       vars: { type: "vars", title: "变量" },

@@ -18,12 +18,16 @@ from __future__ import annotations
 import ast
 import inspect
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
 import traceback
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -106,6 +110,42 @@ def run_python(code: str, inputs: list[dict]) -> list:
     return payload.get("outputs") or []
 
 
+def meta_from_runner(js: Path) -> dict | None:
+    """Read a module's code and raw input texts by actually loading it.
+
+    Regexing the module source (the fallback below) truncates values that
+    themselves contain "]", e.g. testInputs: ["intervals = [[1,3],[2,6]]"], so a
+    module could silently contribute only its first testcase. The runner reports
+    the real fields instead.
+    """
+    node = shutil.which("node") or "node"
+    runner = ROOT / "tools" / "validate_runner.js"
+    if not runner.is_file():
+        return None
+    env = dict(os.environ)
+    target = js.resolve()
+    env["NODE_OPTIONS"] = (
+        f"--require {str(runner).replace(os.sep, '/')} "
+        f"--require {str(target).replace(os.sep, '/')}"
+    )
+    env["ALGOVIZ_MODULE_ID"] = js.stem
+    env["ALGOVIZ_INPUT_INDEX"] = "-1"
+    try:
+        p = subprocess.run([node, "-e", ""], capture_output=True, text=True,
+                           encoding="utf-8", errors="replace", timeout=60,
+                           cwd=str(ROOT), env=env, shell=False)
+    except Exception:
+        return None
+    for line in (p.stdout or "").splitlines():
+        if line.startswith("ALGOVIZ_RESULT="):
+            try:
+                payload = json.loads(line[len("ALGOVIZ_RESULT="):])
+            except Exception:
+                return None
+            return payload.get("meta") if payload.get("ok") else None
+    return None
+
+
 def load_inputs(target: Path) -> tuple[str, list[dict]]:
     if target.suffix == ".json":
         spec = json.loads(target.read_text(encoding="utf-8"))
@@ -113,6 +153,14 @@ def load_inputs(target: Path) -> tuple[str, list[dict]]:
         for t in spec.get("test_inputs", []):
             inputs.append(parse_input_text(t))
         return spec["code"], inputs
+
+    # preferred path: ask the module itself for code + every input text
+    meta = meta_from_runner(target)
+    if meta and isinstance(meta.get("code"), str) and meta.get("inputTexts"):
+        code = meta["code"]
+        inputs = [parse_input_text(t or "") for t in meta["inputTexts"]]
+        return code, inputs
+
     js = target.read_text(encoding="utf-8")
     code_m = re.search(r'code:\s*(\[.*?\]\.join\("\\n"\)|"(?:[^"\\]|\\.)*")', js, re.S)
     # extract code from the JS module (handles array-join or single string form)

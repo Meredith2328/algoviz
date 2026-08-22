@@ -31,10 +31,7 @@
       "coins = [2]\namount = 3",
       "coins = [1]\namount = 0"
     ],
-    expectedOutputs: [
-      "-1",
-      "0"
-    ],
+    expectedOutputs: ["3", "-1", "0"],
 
     views: {
       vars: { type: "vars", title: "变量" },
