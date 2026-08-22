@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc49-字母异位词分组"] = {
     title: "49 字母异位词分组 · 排序键哈希",
+    link: "https://leetcode.cn/problems/group-anagrams/",
     language: "python",
     code: [
       "class Solution:",

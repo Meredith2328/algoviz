@@ -1,0 +1,9 @@
+{
+  "id": "lc56-合并区间",
+  "title": "56 合并区间 · 排序+扫描",
+  "language": "python",
+  "code": "class Solution:\n    def merge(self, intervals: List[List[int]]) -> List[List[int]]:\n        if not intervals:\n            return []\n        intervals.sort()\n        res = [intervals[0]]\n        for start, end in intervals[1:]:\n            if start <= res[-1][1]: # 可合并\n                res[-1][1] = max(res[-1][1], end)\n            else:\n                res.append([start, end])\n        return res",
+  "link": "https://leetcode.cn/problems/merge-intervals/",
+  "problem": "合并所有重叠的区间。排序后依次合并，能合并就更新右端点，否则新开区间。",
+  "source": {"post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md"}
+}

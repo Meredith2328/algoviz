@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc322-零钱兑换-v2"] = {
     title: "322 零钱兑换 · 递归+记忆化",
+    link: "https://leetcode.cn/problems/coin-change/",
     language: "python",
     code: [
       "class Solution:",

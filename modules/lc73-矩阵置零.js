@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc73-矩阵置零"] = {
     title: "73 矩阵置零 · 暴力标记",
+    link: "https://leetcode.cn/problems/set-matrix-zeroes/",
     language: "python",
     code: [
       "class Solution:",

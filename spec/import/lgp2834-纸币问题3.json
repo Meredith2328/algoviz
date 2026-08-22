@@ -1,0 +1,13 @@
+{
+  "id": "lgp2834-纸币问题3",
+  "title": "P2834 纸币问题3",
+  "language": "cpp",
+  "code": "#include <cstdio>\nusing namespace std;\nint a[1010];\nint dp[10010];\nconst int MOD = 1e9 + 7;\nint main() {\n    int n, w;\n    scanf(\"%d%d\", &n, &w);\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &a[i]);\n    }\n    // dp[i][j]: 用i种纸币凑出金额j的种数\n    dp[0] = 1;\n    for (int i = 0; i < n; i++) { // 当前只有x种纸币, 构造所有可能的金额 \n        for (int j = a[i]; j <= w; j++) {\n            dp[j] = (dp[j] + dp[j - a[i]]) % MOD;\n        }\n    }\n    printf(\"%d\\n\", dp[w]);\n    return 0;\n}",
+  "source": {
+    "note": "D:\\CoursesNow\\10_课程\\面向机试-动态规划洛谷阅读.md",
+    "line": 117
+  },
+  "link": "https://www.luogu.com.cn/problem/P2834",
+  "oj_hint": "本题为标准输入输出（scanf/printf），defaultInput/testInputs 填原始 stdin 多行文本，parseInput 直接返回文本本身",
+  "oj_rules": "7. 本题是 OJ 型输入：defaultInput/testInputs 用原始 stdin 文本（如 \"3 2\\n...\"），parseInput 原样返回该文本（不要按 name=value 解析）；expectedOutputs 填对应 printf 输出的真实值。"
+}

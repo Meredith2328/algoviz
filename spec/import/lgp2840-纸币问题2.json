@@ -1,0 +1,13 @@
+{
+  "id": "lgp2840-纸币问题2",
+  "title": "P2840 纸币问题2",
+  "language": "cpp",
+  "code": "#include <cstdio>\n#include <algorithm>\n#include <vector>\nusing namespace std;\n\nconst int INF = 0x3f3f3f3f;\nconst int mod = 1e9 + 7;\n\nint main() {\n    int n, w;\n    scanf(\"%d%d\", &n, &w);\n    vector<int> costs(n);\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &costs[i]);\n    }\n    vector<int> dp(w + 10, 0);\n    dp[0] = 1;\n    for (int total = 1; total <= w; total++) {\n        for (int j = 0; j < n; j++) {\n            if (total >= costs[j]) {\n                dp[total] = (dp[total] + dp[total - costs[j]]) % mod;\n            }\n        }\n    }\n    printf(\"%d\\n\", dp[w]);\n    return 0;\n}",
+  "source": {
+    "note": "D:\\CoursesNow\\10_课程\\面向机试-动态规划洛谷阅读.md",
+    "line": 83
+  },
+  "link": "https://www.luogu.com.cn/problem/P2840",
+  "oj_hint": "本题为标准输入输出（scanf/printf），defaultInput/testInputs 填原始 stdin 多行文本，parseInput 直接返回文本本身",
+  "oj_rules": "7. 本题是 OJ 型输入：defaultInput/testInputs 用原始 stdin 文本（如 \"3 2\\n...\"），parseInput 原样返回该文本（不要按 name=value 解析）；expectedOutputs 填对应 printf 输出的真实值。"
+}

@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc139-单词拆分"] = {
     title: "139 单词拆分 · 动态规划",
+    link: "https://leetcode.cn/problems/word-break/",
     language: "python",
     code: [
       "class Solution:",

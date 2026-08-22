@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc153-旋转数组最小值"] = {
     title: "153 寻找旋转排序数组中的最小值 · 二分",
+    link: "https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/",
     language: "python",
     code: [
       "class Solution:",

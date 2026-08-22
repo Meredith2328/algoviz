@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc54-螺旋矩阵"] = {
     title: "54 螺旋矩阵 · 模拟",
+    link: "https://leetcode.cn/problems/spiral-matrix/",
     language: "python",
     code: [
       "class Solution:",

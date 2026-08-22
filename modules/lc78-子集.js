@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc78-子集"] = {
     title: "78 子集 · 回溯",
+    link: "https://leetcode.cn/problems/subsets/",
     language: "python",
     code: [
       "class Solution:",

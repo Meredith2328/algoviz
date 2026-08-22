@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc22-括号生成"] = {
     title: "22 括号生成 · 回溯",
+    link: "https://leetcode.cn/problems/generate-parentheses/",
     language: "python",
     code: [
       "class Solution:",

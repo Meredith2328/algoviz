@@ -4,3 +4,4 @@ spec/final_check*.log
 spec/report.json
 .deepseek-key
 modules.json
+.mimosa/

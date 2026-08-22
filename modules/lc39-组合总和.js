@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc39-组合总和"] = {
     title: "39 组合总和 · 回溯",
+    link: "https://leetcode.cn/problems/combination-sum/",
     language: "python",
     code: [
       "class Solution:",

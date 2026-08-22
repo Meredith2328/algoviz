@@ -14,17 +14,22 @@
 
 ```
 algoviz/
-├── player/            播放器（algoviz.js / algoviz.css）
+├── player/            播放器（algoviz.js / algoviz.css，支持 python/cpp 高亮 + 原题跳转）
 ├── modules/           可视化模块（每题一个 js，含 run() 轨迹生成器）
 ├── spec/
 │   ├── module-format.md   模块格式规范（给 LLM 的提示也用它）
+│   ├── import/            从机试笔记抽出的题目 spec（C++ 题解 + 链接）
 │   └── pending/           待生成题目 spec（从博客/题库抽取）
 ├── demo/index.html    本地演示页
 └── tools/
+    ├── import_from_notes.py  从机试笔记抽题解+链接 → spec/import/（可复用，固化为 skill）
     ├── extract_from_blog.py  从 pilog 算法文章抽题解 → spec/pending/
-    ├── generate.py           单题：spec → deepseek 生成模块 → node 验证 → modules/
+    ├── generate.py           单题：spec → deepseek 生成模块 → 验证 → modules/（支持 cpp）
     ├── batch_generate.py     批量版（并发 + 失败重试 + report）
-    ├── validate.js           node 验证器（结构/行号/步数/输出全检）
+    ├── cpp_truth.py          C++ 题解用 g++ 编译跑真实 expectedOutputs（OJ/main 型）
+    ├── validate.py           验证器（结构/行号/步数/输出全检，模块在隔离子进程里跑）
+    ├── validate_runner.js    被 node 预加载的取数 runner（配合 validate.py）
+    ├── build_modules_json.py 重建 modules.json（lc→lgp→oj 排序）
     ├── embed_in_blog.py      把 <div class="algoviz">… 嵌到 pilog 文章代码块上方
     └── sync_integrations.py  同步 player+modules 到 pilog / leetgotya
 ```
@@ -49,12 +54,16 @@ algoviz/
 ## 新增一题
 
 ```bash
-# 1) 手写 spec（code 字段 = 原始 Python，逐字保留）
-# 2) 生成 + 验证（key 放 ~/.deepseek-key）
-python tools/generate.py spec/pending/my-problem.json
-# 3) 验证器独立可用
-node tools/validate.js modules/my-problem.js
-# 4) 同步到两个项目（同步前自动跑完整性校验，不过则中止）
+# 1) 手写 spec（code 字段 = 原始代码，Python 或 C++，逐字保留；也可先用
+#    tools/import_from_notes.py 从机试笔记自动抽取多道题的 spec）
+python tools/import_from_notes.py "D:/CoursesNow/10_课程/面向机试-XXX.md" --out spec/import
+# 2) 生成 + 验证（key 放 ~/.deepseek-key；C++ 用 cpp_truth 编译跑真值）
+python tools/generate.py spec/import/my-problem.json
+# 3) 验证器独立可用（C++ 模块会自动走 cpp_truth 真值）
+python tools/validate.py modules/my-problem.js
+# 4) 重建模块清单（新题入库）
+python tools/build_modules_json.py
+# 5) 同步到两个项目（同步前自动跑完整性校验，不过则中止）
 python tools/sync_integrations.py
 ```
 
@@ -75,8 +84,10 @@ python tools/validate_manifest.py            # 日常自检
 python tools/validate_manifest.py --strict   # 供 CI：有 WARN 也退出 1
 ```
 
-命名约定：`lc<题号>-<短名>[-vN].js`。**文件名务必短**（长描述放模块内 `title` 字段），
-同题多版本用 `-v2`/`-v3` 后缀，下游按版本号取最高。提交镜像时 manifest 与 modules/
+命名约定：`lc<题号>-<短名>[-vN].js`（LeetCode）、`lgp<题号>-<短名>.js`（洛谷）、
+`oj<题号>-<短名>.js`（其他机试题，如 noobdream）。**文件名务必短**（长描述放模块内 `title` 字段），
+同题多版本用 `-v2`/`-v3` 后缀。模块可设 `language: "cpp"`（默认 python）显示 C++ 徽标与高亮，
+设 `link` 可渲染「◈ 原题」跳转（仅 LeetCode / 洛谷）。提交镜像时 manifest 与 modules/
 必须在**同一个 commit** 里（`git add algoviz/` 整目录一起加）。
 
 [leetgotya](https://meredith2328.github.io/leetgotya/) 里已接好：揭示面板对预存的题目显示「▶ 步骤可视化」按钮

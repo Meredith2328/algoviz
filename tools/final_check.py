@@ -37,7 +37,7 @@ def main() -> None:
             truth = [o.replace(" ", "") for o in j["outputs"]]
             env["ALGOVIZ_TRUTH"] = json.dumps({f.stem: truth}, ensure_ascii=False)
         v = subprocess.run(
-            ["node", str(ROOT / "tools" / "validate.js"), str(f)],
+            [sys.executable, str(ROOT / "tools" / "validate.py"), str(f)],
             capture_output=True, text=True, timeout=120, env=env,
         )
         if v.returncode == 0:

@@ -1,0 +1,13 @@
+{
+  "id": "lgp1048-采药",
+  "title": "P1048 采药",
+  "language": "cpp",
+  "code": "#include <cstdio>\n#include <algorithm>\nusing namespace std;\nint dp[1010];\nint main() {\n    int T, M, t, v;\n    scanf(\"%d%d\", &T, &M);\n    // dp[i][j]表示前i种草药在j时间内能获得的最大价值\n    for (int i = 0; i < M; i++) {\n        scanf(\"%d%d\", &t, &v);\n        for (int j = T; j >= t; j--) {\n            dp[j] = max(dp[j], dp[j - t] + v);\n        }\n    }\n    printf(\"%d\\n\", dp[T]);\n    return 0;\n}",
+  "source": {
+    "note": "D:\\CoursesNow\\10_课程\\面向机试-动态规划洛谷阅读.md",
+    "line": 144
+  },
+  "link": "https://www.luogu.com.cn/problem/P1048",
+  "oj_hint": "本题为标准输入输出（scanf/printf），defaultInput/testInputs 填原始 stdin 多行文本，parseInput 直接返回文本本身",
+  "oj_rules": "7. 本题是 OJ 型输入：defaultInput/testInputs 用原始 stdin 文本（如 \"3 2\\n...\"），parseInput 原样返回该文本（不要按 name=value 解析）；expectedOutputs 填对应 printf 输出的真实值。"
+}

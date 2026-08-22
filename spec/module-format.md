@@ -7,7 +7,8 @@
   global.AlgoVizModules = global.AlgoVizModules || {};
   global.AlgoVizModules["<id>"] = {
     title: "题号 标题 · 解法名",       // 必填，展示在播放器头部
-    language: "python",               // 目前只支持 python
+    language: "python",               // 可选，"python" | "cpp"，缺省 "python"
+    link: "https://leetcode.cn/problems/...", // 可选，原题链接（仅 LeetCode/洛谷会渲染跳转按钮）
     code: "原始 Python 代码（逐字保留，不改任何字符）",  // 必填
     defaultInput: "可编辑文本，每行一个变量",             // 必填
     inputHint: "输入格式说明",          // 可选
@@ -54,6 +55,15 @@
 4. 不确定的库行为（如 `collections.deque`）用等价 JS 结构模拟，行为要对。
 5. 模块必须无外部依赖（不许 import/require/fetch），纯 ES5 语法（var、function，
    不用箭头函数、模板字符串、let/const、Set/Map 之外的 ES6+ API 可以用 JSON/Array 常规方法）。
+
+## 语言与链接（language / link）
+
+- `language`：`"python"`（缺省）或 `"cpp"`。播放器据此选语法高亮器并在标题旁显示
+  `Python` / `C++` 徽标。**C++ 模块务必设 `language: "cpp"`**，否则代码会按 Python 规则高亮。
+- `link`：原题链接（可选）。只对 LeetCode（`leetcode.cn` / `leetcode.com`）和
+  洛谷（`luogu.com.cn`）渲染「◈ 原题」跳转按钮，其他域名不显示跳转。
+
+C++ 模块同样要满足 run() 等价、line 对准原始代码、步骤数适中等约束；视图类型不受语言影响。
 
 ## 视图类型与状态形状
 

@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc189-轮转数组"] = {
     title: "189 轮转数组 · 切片拼接",
+    link: "https://leetcode.cn/problems/rotate-array/",
     language: "python",
     code: [
       "class Solution:",

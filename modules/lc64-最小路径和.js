@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc64-最小路径和"] = {
     title: "64 最小路径和 · 动态规划",
+    link: "https://leetcode.cn/problems/minimum-path-sum/",
     language: "python",
     code: [
       "class Solution:",

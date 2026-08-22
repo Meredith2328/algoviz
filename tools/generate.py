@@ -112,26 +112,38 @@ def fix_registration(js: str, want_id: str) -> str:
     return re.sub(r'AlgoVizModules\["[^"]*"\]', repl, js, count=1)
 
 
+def module_language(js_path: Path) -> str:
+    """Best-effort read of the module's language field ('cpp' vs default 'python')."""
+    txt = js_path.read_text(encoding="utf-8", errors="replace")
+    m = re.search(r'language\s*:\s*"([^"]+)"', txt) or re.search(r"language\s*:\s*'([^']+)'", txt)
+    return m.group(1).lower() if m and m.group(1).lower() in ("cpp", "python") else "python"
+
+
 def validate_module(js_path: Path) -> tuple[bool, str]:
-    truth = ground_truth(js_path)
+    lang = module_language(js_path)
+    truth = ground_truth(js_path, lang)
     env = dict(os.environ)
     if truth:
         env["ALGOVIZ_TRUTH"] = json.dumps({js_path.stem: truth}, ensure_ascii=False)
     p = subprocess.run(
-        ["node", str(ROOT / "tools" / "validate.js"), str(js_path)],
+        [sys.executable, str(ROOT / "tools" / "validate.py"), str(js_path)],
         capture_output=True, text=True, timeout=60, env=env,
     )
     return p.returncode == 0, (p.stdout + p.stderr).strip()
 
 
-def ground_truth(js_path: Path) -> list[str] | None:
-    """Run the ORIGINAL python code with the module's own inputs; returns
-    real outputs per input (whitespace-normalized), or None when the module
-    uses inputs the harness can't exec (non-leetcode style etc.)."""
+def ground_truth(js_path: Path, language: str = "python") -> list[str] | None:
+    """Run the ORIGINAL source code with the module's own inputs; returns real
+    outputs per input (whitespace-normalized), or None when it can't be run.
+
+    - python: exec the code via crosscheck.py (LeetCode style).
+    - cpp:    compile + run via cpp_truth.py (needs g++).
+    """
     try:
+        runner = "crosscheck.py" if language != "cpp" else "cpp_truth.py"
         p = subprocess.run(
-            [sys.executable, str(ROOT / "tools" / "crosscheck.py"), str(js_path)],
-            capture_output=True, text=True, timeout=60,
+            [sys.executable, str(ROOT / "tools" / runner), str(js_path)],
+            capture_output=True, text=True, timeout=120,
         )
         j = json.loads(p.stdout.strip().splitlines()[-1])
     except Exception:
@@ -142,11 +154,13 @@ def ground_truth(js_path: Path) -> list[str] | None:
 
 
 def build_prompt(spec: dict) -> list[dict]:
+    lang = spec.get("language") or "python"
+    lang_label = "C++" if lang == "cpp" else "Python"
     sys_msg = (
         "你是 algoviz 可视化模块生成器。algoviz 是一个算法步骤播放器：左边显示原始 "
-        "Python 代码并像调试器一样逐步高亮当前行，右边显示若干可视化视图。"
-        "你的任务是把给定的 Python 题解转译成一个自包含的 JS 模块，该模块的 run(input) "
-        "要忠实复现 Python 解法的执行过程并产出步骤数组。只输出一个 ```js 代码块，"
+        f"{lang_label} 代码并像调试器一样逐步高亮当前行，右边显示若干可视化视图。"
+        f"你的任务是把给定的 {lang_label} 题解转译成一个自包含的 JS 模块，该模块的 run(input) "
+        "要忠实复现原解法的执行过程并产出步骤数组。只输出一个 ```js 代码块，"
         "不要输出其它解释。"
     )
     user_msg = f"""# algoviz 模块格式规范
@@ -163,22 +177,28 @@ def build_prompt(spec: dict) -> list[dict]:
 
 模块 id: {spec['id']}
 标题: {spec['title']}
+语言: {lang_label}（模块的 language 字段必须写 {json.dumps(lang)}）
+{("原题链接: " + spec['link']) if spec.get('link') else ""}
 {("题意: " + spec['problem']) if spec.get('problem') else ""}
+{("OJ 型（标准输入输出）: " + spec['oj_hint']) if spec.get('oj_hint') else ""}
 
-原始 Python 代码（模块的 code 字段必须与它逐字一致，不得改动任何字符，
+原始 {lang_label} 代码（模块的 code 字段必须与它逐字一致，不得改动任何字符，
 因为行高亮要对准用户的原始代码；JS 实现里的 line 号必须对应这段代码的 1-based 行号）:
 
-```python
+```{lang}
 {spec['code'].rstrip()}
 ```
 
 要求：
-1. run(input) 的算法逻辑必须与这段 Python 完全等价，输出也要一致。
-2. defaultInput 用一个简短、能体现算法过程的用例；testInputs 再给 1-2 个（含边界情况），
-   expectedOutputs 给出每个输入对应 Python 解法的真实输出（认真模拟，别瞎写）。
-3. views 选 2-4 个最能体现该算法结构的视图（参考规范里的视图类型说明）。
-4. 每步 msg 用简体中文解释这一行在做什么。
-5. 步骤数控制在 30-200 之间（对小型输入）；不要为一次赋值记录多步。
+1. run(input) 的算法逻辑必须与这段 {lang_label} 完全等价，输出也要一致。
+2. 模块要有 language 字段（{"\"cpp\"" if lang == "cpp" else "\"python\""}），
+   且若上方给了原题链接，模块的 link 字段就填它（只对 LeetCode/洛谷渲染跳转）。
+3. defaultInput 用一个简短、能体现算法过程的用例；testInputs 再给 1-2 个（含边界情况），
+   expectedOutputs 给出每个输入对应 {lang_label} 解法的真实输出（认真模拟，别瞎写）。
+4. views 选 2-4 个最能体现该算法结构的视图（参考规范里的视图类型说明）。
+5. 每步 msg 用简体中文解释这一行在做什么。
+6. 步骤数控制在 30-200 之间（对小型输入）；不要为一次赋值记录多步。
+{spec['oj_rules'] if spec.get('oj_rules') else ""}
 """
     return [{"role": "system", "content": sys_msg}, {"role": "user", "content": user_msg}]
 
@@ -187,7 +207,8 @@ def fix_prompt(spec: dict, js: str, errors: str) -> list[dict]:
     return build_prompt(spec) + [
         {"role": "assistant", "content": "```js\n" + js + "\n```"},
         {"role": "user", "content": f"你生成的模块没有通过验证，错误信息：\n\n{errors}\n\n"
-         "请修复后重新输出完整的 ```js 模块（注意 code 字段必须与原始 Python 逐字一致）。"},
+         "请修复后重新输出完整的 ```js 模块（注意 code 字段必须与原始代码逐字一致，"
+         "language 字段要写对，若给了 link 字段也请保留）。"},
     ]
 
 

@@ -1,0 +1,9 @@
+{
+  "id": "lc347-前k个高频元素",
+  "title": "347 前K个高频元素 · 计数排序",
+  "language": "python",
+  "code": "class Solution:\n    def topKFrequent(self, nums: List[int], k: int) -> List[int]:\n        freq = defaultdict(int)\n        for num in nums:\n            freq[num] += 1\n        items = list(sorted(freq.items(), key = lambda x: -x[1]))\n        return [x[0] for x in items[:k]]",
+  "link": "https://leetcode.cn/problems/top-k-frequent-elements/",
+  "problem": "返回频率最高的 k 个元素。统计频率后按频率降序排序，取前 k 个。",
+  "source": {"post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-4.md"}
+}

@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc70-爬楼梯"] = {
     title: "70 爬楼梯 · 动态规划",
+    link: "https://leetcode.cn/problems/climbing-stairs/",
     language: "python",
     code: [
       "class Solution:",

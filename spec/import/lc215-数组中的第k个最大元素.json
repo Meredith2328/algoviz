@@ -1,0 +1,9 @@
+{
+  "id": "lc215-数组中的第k个最大元素",
+  "title": "215 数组中的第K个最大元素 · 堆（维护 size=k）",
+  "language": "python",
+  "code": "class Solution:\n    def findKthLargest(self, nums: List[int], k: int) -> int:\n        heap = [] # 最小堆解法\n        for num in nums:\n            heapq.heappush(heap, num)\n            if len(heap) > k:\n                heapq.heappop(heap)\n        return heap[0]",
+  "link": "https://leetcode.cn/problems/kth-largest-element-in-an-array/",
+  "problem": "数组中的第K个最大元素。用大小为 k 的最小堆维护当前前 k 大元素，堆顶即第 k 大。",
+  "source": {"post": "C:\\desktoppp\\pilog\\blogs\\posts\\notes\\algo\\algorithm-5.md"}
+}

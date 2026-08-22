@@ -33,7 +33,7 @@ jobs:
           cp -r player site-bundle/player
           cp -r modules site-bundle/modules
           cp spec/module-format.md site-bundle/spec/
-          node tools/build_modules_json.js site-bundle/modules.json
+          python3 tools/build_modules_json.py site-bundle/modules.json
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

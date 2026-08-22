@@ -19,9 +19,15 @@ import ast
 import inspect
 import json
 import re
+import subprocess
 import sys
+import tempfile
 import traceback
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+RUN_TIMEOUT_S = 60
 
 
 def parse_input_text(text: str) -> dict:
@@ -63,148 +69,41 @@ def ListNode():
 
 
 def run_python(code: str, inputs: list[dict]) -> list:
-    """Exec code defining class Solution, call its (first) method per input."""
-    ns: dict = {"__builtins__": __builtins__}
-    # typing shims so `from typing import List` style hints survive without imports
-    for t in ("List", "Optional", "Dict", "DefaultDict", "Tuple", "Set", "deque"):
-        ns[t] = t
-    ns["TreeNode"] = TreeNode()
-    ns["ListNode"] = ListNode()
-    ns["deque"] = __import__("collections").deque
-    ns["heapq"] = __import__("heapq")
-    ns["math"] = __import__("math")
-    ns["itertools"] = __import__("itertools")
-    ns["functools"] = __import__("functools")
-    ns["string"] = __import__("string")
-    ns["re"] = __import__("re")
-    exec(code, ns)  # noqa: S102 - trusted local blog code
-    sol_cls = None
-    for v in ns.values():
-        if inspect.isclass(v) and v.__name__ == "Solution":
-            sol_cls = v
-            break
-    if sol_cls is None:
-        raise ValueError("no class Solution")
+    """Compute the solution's real outputs by running it in a separate process.
 
-    method = None
-    pub = [n for n in dir(sol_cls)
-           if not n.startswith("_") and callable(getattr(sol_cls, n))]
-    if len(pub) != 1:
-        raise ValueError(f"expected exactly 1 public method, got {pub}")
-    method = pub[0]
+    The题解 is written to a temp dir together with a generated driver, then the
+    Python interpreter is invoked on the driver (argv list, no shell). Nothing
+    here calls exec/eval — the interpreter does the executing, the same way
+    cpp_truth.py hands C++ to g++. A runaway solution can only stall its own
+    short-lived process, which we bound with a timeout.
+    """
+    from crosscheck_driver import DRIVER_TEMPLATE
 
-    params = list(inspect.signature(getattr(sol_cls, method)).parameters)
-    arg_names = [p for p in params if p != "self"]
+    with tempfile.TemporaryDirectory() as tmp:
+        d = Path(tmp)
+        (d / "solution.py").write_text(code, encoding="utf-8")
+        (d / "job.json").write_text(
+            json.dumps({"inputs": inputs}, ensure_ascii=False), encoding="utf-8")
+        driver = d / "driver.py"
+        driver.write_text(DRIVER_TEMPLATE, encoding="utf-8")
 
-    def ser(v):
-        if isinstance(v, (int, float, str, bool)) or v is None:
-            if isinstance(v, float) and v == int(v):
-                return int(v)  # 2.0 -> 2 to match JSON-ish module outputs
-            return v
-        if isinstance(v, (list, tuple)):
-            return [ser(x) for x in v]
-        if isinstance(v, dict):
-            return {str(k): ser(x) for k, x in v.items()}
-        if hasattr(v, "val") and hasattr(v, "left"):  # TreeNode -> level array
-            def tn(n):
-                if n is None:
-                    return None
-                out = [n.val]
-                q = [n]
-                while q:
-                    cur = q.pop(0)
-                    for c in (cur.left, cur.right):
-                        if c is not None:
-                            out.append(c.val)
-                            q.append(c)
-                return out
-            return tn(v)
-        if hasattr(v, "val") and hasattr(v, "next"):  # ListNode
-            def ln(n):
-                out = []
-                while n is not None:
-                    out.append(n.val)
-                    n = n.next
-                return out
-            return ln(v)
-        return str(v)
+        proc = subprocess.run(
+            [sys.executable, str(driver)],
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=RUN_TIMEOUT_S, cwd=str(d), shell=False,
+        )
 
-    # node constructors from arrays, used when the solution walks .next/.left
-    LN = ns.get("ListNode") or ListNode()
-    TN = ns.get("TreeNode") or TreeNode()
-
-    def to_nodes(v, pos=None):
-        if not isinstance(v, list) or not v:
-            return v
-        nodes = [LN(x) for x in v]
-        for i in range(len(nodes) - 1):
-            nodes[i].next = nodes[i + 1]
-        if pos is not None and 0 <= pos < len(nodes):
-            nodes[-1].next = nodes[pos]
-        return nodes[0]
-
-    def to_tree(v):
-        # level-order array (LC style): [1,2,3,4] with nulls as None
-        if not isinstance(v, list) or not v:
-            return None
-        root = TN(v[0])
-        q = [root]
-        i = 1
-        while q and i < len(v):
-            n = q.pop(0)
-            if i < len(v) and v[i] is not None:
-                n.left = TN(v[i]); q.append(n.left)
-            i += 1
-            if i < len(v) and v[i] is not None:
-                n.right = TN(v[i]); q.append(n.right)
-            i += 1
-        return root
-
-    wants_list = ".next" in code
-    wants_tree = (".left" in code or ".right" in code) and ".next" not in code
-
-    def prep(arg_name, arg):
-        if wants_list and isinstance(arg, list) and arg and not isinstance(arg[0], list):
-            pos = env_pos.get("pos")
-            return to_nodes(arg, pos)
-        if wants_tree and isinstance(arg, list) and arg:
-            return to_tree(arg)
-        return arg
-
-    def find_node(root, val):
-        q = [root]
-        while q:
-            n = q.pop(0)
-            if n is None:
-                continue
-            if n.val == val:
-                return n
-            q.append(n.left); q.append(n.right)
-        return val
-
-    outs = []
-    for env in inputs:
-        sol = sol_cls()
-        env_pos = env
-        raw_args = [env.get(a) for a in arg_names]
-        args = [prep(a, v) for a, v in zip(arg_names, raw_args)]
-        # LCA-family: map selector values (p/q) to actual tree nodes
-        if wants_tree and args and isinstance(args[0], object) and hasattr(args[0], "val"):
-            for i, a in enumerate(arg_names):
-                if a in ("p", "q", "u", "v") and isinstance(args[i], (int, str)):
-                    args[i] = find_node(args[0], args[i])
-        result = getattr(sol, method)(*args)
-        if result is None:
-            # in-place problems return None; report the mutated argument:
-            # nested list (matrix), flat list (array), or linked list
-            for raw in args:
-                if isinstance(raw, list):
-                    result = raw
-                    break
-            if result is None and wants_list and args and args[0] is not None:
-                result = ser(args[0])
-        outs.append(json.dumps(ser(result), ensure_ascii=False))
-    return outs
+    out = (proc.stdout or "").strip().splitlines()
+    if not out:
+        err = (proc.stderr or "").strip() or "solution driver produced no output"
+        raise RuntimeError(err.splitlines()[-1])
+    try:
+        payload = json.loads(out[-1])
+    except Exception:
+        raise RuntimeError("unparsable driver output: " + out[-1][:200])
+    if not payload.get("ok"):
+        raise RuntimeError(payload.get("error") or "solution failed")
+    return payload.get("outputs") or []
 
 
 def load_inputs(target: Path) -> tuple[str, list[dict]]:

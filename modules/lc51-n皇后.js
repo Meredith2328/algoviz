@@ -3,6 +3,7 @@
 
   global.AlgoVizModules["lc51-n皇后"] = {
     title: "51 N皇后 · 回溯",
+    link: "https://leetcode.cn/problems/n-queens/",
     language: "python",
     code: [
       "class Solution:",

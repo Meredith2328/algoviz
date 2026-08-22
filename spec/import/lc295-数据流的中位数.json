@@ -1,0 +1,11 @@
+{
+  "id": "lc295-数据流的中位数",
+  "title": "295 数据流的中位数",
+  "language": "cpp",
+  "code": "class MedianFinder {\nprivate:\n    priority_queue<int> low;\n    priority_queue<int, vector<int>, greater<int>> high;\n\npublic:\n    MedianFinder() {\n        \n    }\n    \n    void addNum(int num) {\n        if (low.empty() || num <= low.top()) {\n            low.push(num);\n        } else {\n            high.push(num);\n        }\n\n        if (low.size() > high.size() + 1) {\n            high.push(low.top());\n            low.pop();\n        } else if (low.size() < high.size()) {\n            low.push(high.top());\n            high.pop();\n        }\n    }\n    \n    double findMedian() {\n        if (low.size() == high.size()) { // 高要求: 防止溢出!\n            return ((double)low.top() + high.top()) / 2.0;\n        } else {\n            return low.top();\n        }\n    }\n};\n\n/**\n * Your MedianFinder object will be instantiated and called as such:\n * MedianFinder* obj = new MedianFinder();\n * obj->addNum(num);\n * double param_2 = obj->findMedian();\n */",
+  "source": {
+    "note": "D:\\CoursesNow\\10_课程\\面向机试-中位数问题和堆专题（含C++模板）.md",
+    "line": 80
+  },
+  "link": "https://leetcode.cn/problems/find-median-from-data-stream"
+}

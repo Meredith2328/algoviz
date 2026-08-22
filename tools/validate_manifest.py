@@ -26,7 +26,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MODULES = ROOT / "modules"
 
-ID_RE = re.compile(r"^lc(\d+)-(.+?)(-v(\d+))?$")
+ID_RE = re.compile(r"^(?:lc|lgp|oj)(\d+)-(.+?)(-v(\d+))?$")
+# note: for manifest/reporting, lgp & oj numbers are pushed far apart from lc
+# via +100000 so a Luogu P1048 never collides with LeetCode 1048.
 FORBIDDEN = re.compile(r'[\\/:*?"<>|\x00-\x1f]')
 NAME_LIMIT = 200          # 字节；给 Linux 255 字节上限留余量
 SHORT_NAME_SUGGEST = 40   # 字节；超过给 WARN（建议把长描述放 title）
@@ -55,11 +57,18 @@ def check_modules(errors: list, warnings: list, use_node: bool = True) -> dict[s
 
         m = ID_RE.match(stem)
         if not m:
-            warnings.append(f"{stem} 不符合 lc<题号>-<名称>[-vN] 命名规范"
+            warnings.append(f"{stem} 不符合 lc/lgp/oj<题号>-<名称>[-vN] 命名规范"
                             "（num 为空，下游按题号索引时不会被收录）")
             seen[stem] = {"num": None, "version": 0, "path": f}
             continue
-        num, version = int(m.group(1)), int(m.group(4) or 0)
+        raw_num, version = int(m.group(1)), int(m.group(4) or 0)
+        # keep Luogu / oj numbers from colliding with same-numbered LeetCode ids
+        if stem.startswith("lgp"):
+            num = 100000 + raw_num
+        elif stem.startswith("oj"):
+            num = 200000 + raw_num
+        else:
+            num = raw_num
         if m.group(2) == "":
             errors.append(f"{stem} 题号后缺少名称段")
 
@@ -86,7 +95,14 @@ def check_modules(errors: list, warnings: list, use_node: bool = True) -> dict[s
             by_num.setdefault(info["num"], []).append(info["version"])
     for num, vers in sorted(by_num.items()):
         if max(vers) > 0 and 0 not in vers:
-            warnings.append(f"题号 {num} 只有 -v{max(vers)} 版本、没有 v1（命名不一致？）")
+            # map offset num back to a readable lc/lgp/oj number
+            if num >= 200000:
+                shown = f"oj{num - 200000}"
+            elif num >= 100000:
+                shown = f"lgp{num - 100000}"
+            else:
+                shown = str(num)
+            warnings.append(f"题号 {shown} 只有 -v{max(vers)} 版本、没有 v1（命名不一致？）")
     return seen
 
 

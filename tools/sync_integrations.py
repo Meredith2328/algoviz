@@ -24,6 +24,7 @@ PILOG = Path("C:/desktoppp/pilog")
 LEETGOTYA = Path("C:/desktoppp/leetgotya")
 
 LC_RE = re.compile(r"^lc(\d+)-")
+LGP_RE = re.compile(r"^lgp(\d+)-")
 
 
 def validate() -> None:
@@ -48,7 +49,8 @@ def build_manifest() -> dict:
     for f in sorted((ROOT / "modules").glob("*.js")):
         mid = f.stem
         m = LC_RE.match(mid)
-        num = int(m.group(1)) if m else None
+        g = LGP_RE.match(mid)
+        num = int(m.group(1)) if m else (100000 + int(g.group(1)) if g else None)
         title = ""
         tm = re.search(r'title:\s*"([^"]*)"', f.read_text(encoding="utf-8"), re.S)
         if tm:
