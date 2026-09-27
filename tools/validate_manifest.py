@@ -17,11 +17,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+from consumer_paths import ENV_VARS, ConsumerNotFound, resolve_consumer
 
 ROOT = Path(__file__).resolve().parent.parent
 MODULES = ROOT / "modules"
@@ -167,6 +170,8 @@ def main() -> int:
     ap.add_argument("--strict", action="store_true", help="有 WARN 也退出码 1")
     ap.add_argument("--skip-node", action="store_true", help="跳过 node --check")
     ap.add_argument("--skip-sync-check", action="store_true", help="跳过下游镜像一致性检查")
+    ap.add_argument("--leetgotya", help=f"leetgotya 根目录（或环境变量 {ENV_VARS['leetgotya']}）")
+    ap.add_argument("--pilog", help=f"pilog 根目录（或环境变量 {ENV_VARS['pilog']}）")
     args = ap.parse_args()
 
     errors: list[str] = []
@@ -177,9 +182,15 @@ def main() -> int:
         warnings = [w for w in warnings if "node" not in w]
     check_modules_json(seen, errors, warnings)
 
-    consumers = [Path("C:/desktoppp/leetgotya"), Path("C:/desktoppp/pilog/generator/static")]
     if not args.skip_sync_check:
-        for c, n in zip(consumers, ["algoviz", "algoviz-player"]):
+        for key, sub, n in (("leetgotya", "", "algoviz"),
+                            ("pilog", "generator/static", "algoviz-player")):
+            try:
+                c = resolve_consumer(key, getattr(args, key)) / sub
+            except ConsumerNotFound as e:
+                if getattr(args, key) or os.environ.get(ENV_VARS[key]):
+                    errors.append(str(e))
+                continue  # 找不到消费方 = 尚未同步，不算错
             try:
                 check_sync_target(c, n, seen, errors, warnings)
             except Exception as e:
