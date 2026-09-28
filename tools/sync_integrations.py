@@ -3,6 +3,10 @@
   python sync_integrations.py            # sync both
   python sync_integrations.py pilog      # only pilog
   python sync_integrations.py leetgotya  # only leetgotya
+  python sync_integrations.py --pilog D:/src/pilog --leetgotya D:/src/leetgotya
+
+Consumer roots: --pilog/--leetgotya, else $ALGOVIZ_PILOG/$ALGOVIZ_LEETGOTYA,
+else ../pilog and ../leetgotya next to this repo, else C:/desktoppp/<name>.
 
 - pilog:     copy player + modules -> pilog/generator/static/algoviz/
 - leetgotya: copy player + modules -> leetgotya/algoviz/
@@ -12,6 +16,7 @@ id/title, so leetgotya can look up a module by question id.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import shutil
@@ -19,9 +24,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+from consumer_paths import ENV_VARS, ConsumerNotFound, resolve_consumer
+
 ROOT = Path(__file__).resolve().parent.parent
-PILOG = Path("C:/desktoppp/pilog")
-LEETGOTYA = Path("C:/desktoppp/leetgotya")
 
 LC_RE = re.compile(r"^lc(\d+)-")
 LGP_RE = re.compile(r"^lgp(\d+)-")
@@ -84,12 +89,23 @@ def sync(target_dir: Path, name: str = "algoviz") -> None:
 
 
 def main() -> None:
-    which = sys.argv[1] if len(sys.argv) > 1 else "all"
+    ap = argparse.ArgumentParser(description="sync algoviz player + modules into consumers")
+    ap.add_argument("which", nargs="?", default="all", choices=["all", "pilog", "leetgotya"])
+    ap.add_argument("--pilog", help=f"pilog root (or env {ENV_VARS['pilog']})")
+    ap.add_argument("--leetgotya", help=f"leetgotya root (or env {ENV_VARS['leetgotya']})")
+    args = ap.parse_args()
+
+    targets = [n for n in ("pilog", "leetgotya") if args.which in ("all", n)]
+    try:
+        roots = {n: resolve_consumer(n, getattr(args, n)) for n in targets}
+    except ConsumerNotFound as e:
+        sys.exit(str(e))
+
     validate()
-    if which in ("all", "pilog"):
-        sync(PILOG / "generator" / "static", "algoviz-player")
-    if which in ("all", "leetgotya"):
-        sync(LEETGOTYA, "algoviz")
+    if "pilog" in roots:
+        sync(roots["pilog"] / "generator" / "static", "algoviz-player")
+    if "leetgotya" in roots:
+        sync(roots["leetgotya"], "algoviz")
 
 
 if __name__ == "__main__":
